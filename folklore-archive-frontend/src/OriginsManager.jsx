@@ -35,6 +35,30 @@ function OriginsManager() {
         }
     };
 
+    const handleUpdateOrigin = async (id, updatedData) => {
+        setError(null); // Clear any existing errors
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/origins/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData),
+            });
+
+            if (response.ok) {
+                // If successful, refresh the list to show the new data
+                fetchOrigins();
+            } else {
+                // If the server rejects it (e.g., failing validation), show the error
+                const data = await response.json();
+                setError(data.message || "Failed to update origin.");
+            }
+        } catch (err) {
+            console.error('Error updating origin:', err);
+            setError("A network error occurred while saving.");
+        }
+    };
+
     return (
         <div className="origins-manager">
             <nav className="main-nav">
@@ -60,7 +84,7 @@ function OriginsManager() {
                     <OriginRow
                         key={origin.id}
                         origin={origin}
-                        onUpdate={fetchOrigins}
+                        onUpdate={handleUpdateOrigin}
                         onDelete={handleDeleteOrigin}
                     />
                 ))}
