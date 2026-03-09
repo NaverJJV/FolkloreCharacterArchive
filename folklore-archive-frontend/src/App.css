@@ -377,3 +377,35 @@
   outline: none;
   box-shadow: 0 0 0 3px rgba(139, 58, 26, 0.12);
 }
+
+.tale-header {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem; /* Large gap from the text */
+  margin-bottom: 1.2rem;
+  padding: 0 1rem;
+}
+
+.tale-header h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--color-ink-soft);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.edit-tale-btn {
+  background-color: var(--color-ink-soft);
+  color: var(--color-parchment);
+  border: 1px solid var(--border-strong);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  width: auto; /* Ensure it only takes up needed space */
+  transition: background-color var(--transition-fast);
+}
+
+.edit-tale-btn:hover {
+  background-color: var(--color-ember);
+}

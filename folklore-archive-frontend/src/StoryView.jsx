@@ -164,20 +164,22 @@ function StoryView() {
                 )}
             </div>
 
-            {/* NEW LAYOUT: THE TALE */}
-            <div className="story-content-section" style={{ position: 'relative', maxWidth: '850px', margin: '2rem auto 4rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', padding: '0 1rem' }}>
-                    <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', color: 'var(--color-ink-soft)', borderBottom: 'none', paddingBottom: 0 }}>The Tale</h2>
-
-                    {/* Edit button is now outside the reading pane */}
+            {/* THE TALE */}
+            <div className="story-content-section"
+                 style={{position: 'relative', maxWidth: '850px', margin: '2rem auto 4rem'}}>
+                <div className="tale-header">
+                    <h2>The Tale</h2>
                     {editingField !== 'content' && (
-                        <button className="toggle-button" onClick={() => setEditingField('content')} style={{ padding: '0.4rem 1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <span>&#x270E;</span> Edit Text
+                        <button
+                            className="edit-tale-btn"
+                            onClick={() => setEditingField('content')}
+                        >
+                            <span>&#x270E;</span> Edit Tale
                         </button>
                     )}
                 </div>
 
-                <div className="story-content-container" style={{ margin: 0 }}>
+                <div className="story-content-container" style={{margin: 0}}>
                     {editingField === 'content' ? (
                         <div className="inline-edit-group content-edit">
                             <textarea
@@ -186,7 +188,8 @@ function StoryView() {
                                 autoFocus
                                 placeholder="Pen your tale here..."
                             />
-                            <div className="edit-actions" style={{ display: 'flex', gap: '10px', marginTop: '1rem', justifyContent: 'flex-end' }}>
+                            <div className="edit-actions"
+                                 style={{display: 'flex', gap: '10px', marginTop: '1rem', justifyContent: 'flex-end'}}>
                                 <button onClick={() => setEditingField(null)} className="toggle-button">Cancel</button>
                                 <button onClick={handleSaveStoryDetail} className="edit-button">Save Tale</button>
                             </div>
@@ -199,7 +202,8 @@ function StoryView() {
                                         <p key={index}>{paragraph}</p>
                                     ))
                                 ) : (
-                                    <p className="empty-content">Click "Edit Text" to begin chronicling this story...</p>
+                                    <p className="empty-content">Click "Edit Text" to begin chronicling this
+                                        story...</p>
                                 )}
                             </div>
                         </div>
@@ -207,11 +211,12 @@ function StoryView() {
                 </div>
             </div>
 
-            <h2 style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>Cast of Characters</h2>
+            <h2 style={{borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem'}}>Cast of Characters</h2>
 
             <div className="character-grid">
                 {characters.map(char => (
-                    <StoryCharacterCard key={char.id} char={char} onDetach={handleDetach} onUpdateRole={handleUpdateRole} />
+                    <StoryCharacterCard key={char.id} char={char} onDetach={handleDetach}
+                                        onUpdateRole={handleUpdateRole}/>
                 ))}
 
                 {/* ADD CHARACTER CARD */}
