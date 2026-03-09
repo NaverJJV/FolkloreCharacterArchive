@@ -1,0 +1,36 @@
+# Dependency directories
+node_modules/
+/node_modules
+
+# Optional npm cache directory
+.npm
+.eslintcache
+.stylelintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variable files
+.env
+.env.*
+!.env.example # Track the example file
+
+# Next.js build output
+.next/
+out/
+
+# Nuxt.js build/generate output
+.nuxt/
+dist/
+.output/
+
+# Gatsby files
+.cache/
+# public/ # Uncomment this if your project uses Gatsby and not Next.js
+
+# Jetbrains files
+.idea/
+/.idea
