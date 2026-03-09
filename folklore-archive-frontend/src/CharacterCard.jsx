@@ -10,7 +10,7 @@ function CharacterCard({character, onDelete, onEdit}) {
         name: character.name,
         alias: character.alias,
         core_traits: character.core_traits || '',
-        origin_id: character.origin_id || 1
+        origin_id: character.origin_name || ''
     });
 
     const handleChange = (e) => {
@@ -30,11 +30,15 @@ function CharacterCard({character, onDelete, onEdit}) {
                 <input type="text" name="name" value={editData.name} onChange={handleChange}/>
                 <input type="text" name="alias" value={editData.alias} onChange={handleChange}/>
                 <textarea name="core_traits" value={editData.core_traits} onChange={handleChange}/>
-                <select name="origin_id" value={editData.origin_id} onChange={handleChange}>
-                    <option value={1}>Post-Civil War America</option>
-                    <option value={2}>American Frontier</option>
-                    <option value={3}>6th Century Britain</option>
-                </select>
+                <div className="form-group">
+                    <label>Origin:</label>
+                    <input
+                        type="text"
+                        name="origin_name"
+                        value={editData.origin_name}
+                        onChange={handleChange}
+                    />
+                </div>
 
                 <div className="card-actions">
                     <button className="toggle-button" onClick={submitEdit}>Save</button>

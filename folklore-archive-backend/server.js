@@ -84,19 +84,19 @@ app.post('/api/characters', async (req, res) => {
     try {
         const { name, alias, core_traits, origin_name } = req.body;
 
-        // NEW: Backend Validation
+        // Backend Validation
         if (!origin_name || origin_name.trim() === "") {
             return res.status(400).json({ message: "Origin name is required" });
         }
 
-        // 1. Check if origin exists
+        // Check if origin exists
         let originResult = await pool.query('SELECT id FROM origins WHERE name = $1', [origin_name.trim()]);
 
         let originId;
         if (originResult.rows.length > 0) {
             originId = originResult.rows[0].id;
         } else {
-            // 2. Create it if it doesn't
+            // Create it if it doesn't
             const newOrigin = await pool.query(
                 'INSERT INTO origins (name) VALUES ($1) RETURNING id',
                 [origin_name.trim()]
@@ -104,7 +104,7 @@ app.post('/api/characters', async (req, res) => {
             originId = newOrigin.rows[0].id;
         }
 
-        // 3. Create the character
+        // Create the character
         const newCharacter = await pool.query(
             'INSERT INTO characters (name, alias, core_traits, origin_id) VALUES ($1, $2, $3, $4) RETURNING *',
             [name, alias, core_traits, originId]
@@ -145,27 +145,40 @@ app.delete('/api/characters/:id', async (req, res) => {
 // PUT (update) an existing character
 app.put('/api/characters/:id', async (req, res) => {
     try {
-        // Grab the ID from the URL parameters
-        const {id} = req.params;
+        const { id } = req.params;
+        const { name, alias, core_traits, origin_name } = req.body;
 
-        // Grab the updated data from the request body
-        const {name, alias, core_traits, origin_id} = req.body;
-
-        // Execute the UPDATE SQL query
-        const updateQuery = await pool.query(
-            'UPDATE characters SET name = $1, alias = $2, core_traits = $3, origin_id = $4 WHERE id = $5 RETURNING *',
-            [name, alias, core_traits, origin_id, id]
-        );
-
-        // Check if the character existed
-        if (updateQuery.rowCount === 0) {
-            return res.status(404).json({message: "Character not found"});
+        if (!origin_name || origin_name.trim() === "") {
+            return res.status(400).json({ message: "Origin name is required" });
         }
 
-        // Send back the updated character
+        // Get or Create the origin by name
+        let originResult = await pool.query('SELECT id FROM origins WHERE name = $1', [origin_name.trim()]);
+
+        let originId;
+        if (originResult.rows.length > 0) {
+            originId = originResult.rows[0].id;
+        } else {
+            const newOrigin = await pool.query(
+                'INSERT INTO origins (name) VALUES ($1) RETURNING id',
+                [origin_name.trim()]
+            );
+            originId = newOrigin.rows[0].id;
+        }
+
+        // Update the character with the (potentially new) originId
+        const updateQuery = await pool.query(
+            'UPDATE characters SET name = $1, alias = $2, core_traits = $3, origin_id = $4 WHERE id = $5 RETURNING *',
+            [name, alias, core_traits, originId, id]
+        );
+
+        if (updateQuery.rowCount === 0) {
+            return res.status(404).json({ message: "Character not found" });
+        }
+
         res.json(updateQuery.rows[0]);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
+        console.error("EDIT ERROR:", err.message);
+        res.status(500).json({ error: err.message });
     }
 });
