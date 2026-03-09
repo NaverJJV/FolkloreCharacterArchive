@@ -25,6 +25,12 @@ function StoryRow({ story, onDelete }) {
 
             <p>{story.synopsis || "No synopsis available."}</p>
 
+            {story.updated_at && (
+                <div className="last-edited-timestamp" style={{ borderTop: 'none' }}>
+                    Last edited: {new Date(story.updated_at).toLocaleString()}
+                </div>
+            )}
+
             <div className="card-actions">
                 <Link to={`/stories/${story.id}`} className="view-button" style={{ width: '100%', flex: '1' }}>
                     View Story

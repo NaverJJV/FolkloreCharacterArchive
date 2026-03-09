@@ -40,7 +40,7 @@ function AddCharacterForm({onCharacterAdded}) {
     return (
         <div className={`add-character-container ${isCollapsed ? 'collapsed' : 'expanded'}`}>
             <div className="form-header" onClick={() => setIsCollapsed(!isCollapsed)}>
-                <h2>{isCollapsed ? '+ Add New Figure' : '- Hide Form'}</h2>
+                <h2>{isCollapsed ? '+ Add New Character' : '- Hide Form'}</h2>
             </div>
 
             {!isCollapsed && (

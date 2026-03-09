@@ -132,3 +132,14 @@ button:focus-visible {
 button:active {
   transform: translateY(1px);
 }
+
+/* ── Timestamp Indicator ────────────────────── */
+.last-edited-timestamp {
+  font-size: 0.75rem;
+  color: var(--color-ink-muted);
+  font-style: italic;
+  text-align: right;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px dotted var(--border-light);
+}

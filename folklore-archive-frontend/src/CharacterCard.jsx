@@ -10,7 +10,8 @@ function CharacterCard({character, onDelete, onEdit}) {
         name: character.name,
         alias: character.alias,
         core_traits: character.core_traits || '',
-        origin_name: character.origin_name || ''
+        origin_name: character.origin_name || '',
+        updated_at: character.updated_at
     });
 
     const handleChange = (e) => {
@@ -59,6 +60,12 @@ function CharacterCard({character, onDelete, onEdit}) {
                 <div className="character-details">
                     <p><strong>Origin:</strong> {character.origin_name}</p>
                     <p><strong>Core Traits:</strong> {character.core_traits}</p>
+                </div>
+            )}
+
+            {character.updated_at && (
+                <div className="last-edited-timestamp">
+                    Last edited: {new Date(character.updated_at).toLocaleString()}
                 </div>
             )}
 

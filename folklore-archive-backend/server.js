@@ -93,6 +93,7 @@ app.get('/api/characters-detailed', async (req, res) => {
                 characters.name, 
                 characters.alias, 
                 characters.core_traits, 
+                characters.updated_at, 
                 origins.name AS origin_name 
             FROM characters 
             LEFT JOIN origins ON characters.origin_id = origins.id;
@@ -318,11 +319,11 @@ app.get('/api/stories', async (req, res) => {
     }
 });
 
-// GET the 3 most recently added stories for the dashboard
+// GET the 4 most recently added stories for the dashboard
 app.get('/api/stories/recent', async (req, res) => {
     try {
         const recentStories = await pool.query(
-            'SELECT * FROM stories ORDER BY created_at DESC LIMIT 3'
+            'SELECT * FROM stories ORDER BY created_at DESC LIMIT 4'
         );
         res.json(recentStories.rows);
     } catch (err) {
@@ -357,6 +358,7 @@ app.get('/api/stories/:id/characters', async (req, res) => {
                 c.id, 
                 c.name, 
                 c.alias, 
+                c.updated_at, 
                 cs.role, 
                 o.name AS origin_name
             FROM characters c

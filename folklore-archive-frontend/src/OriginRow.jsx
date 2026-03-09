@@ -64,6 +64,12 @@ function OriginRow({origin, onUpdate, onDelete}) {
             </div>
             <p>{origin.description || "No description provided."}</p>
 
+            {origin.updated_at && (
+                <div className="last-edited-timestamp" style={{ borderTop: 'none', marginTop: 'auto' }}>
+                    Last edited: {new Date(origin.updated_at).toLocaleString()}
+                </div>
+            )}
+
             <div className="card-actions">
                 <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Details</button>
             </div>

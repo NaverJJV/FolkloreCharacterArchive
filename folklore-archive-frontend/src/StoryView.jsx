@@ -174,6 +174,12 @@ function StoryView() {
                         <button className="inline-edit-icon" onClick={() => setEditingField('synopsis')} title="Edit Synopsis">&#x270E;</button>
                     </div>
                 )}
+
+                {story.updated_at && (
+                    <p style={{ fontSize: '0.8rem', color: 'var(--color-ink-muted)', fontStyle: 'italic', marginTop: '1rem' }}>
+                        Last modified: {new Date(story.updated_at).toLocaleString()}
+                    </p>
+                )}
             </div>
 
             <h2 style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>Cast of Characters</h2>
