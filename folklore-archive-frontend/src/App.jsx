@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import AddCharacterForm from './AddCharacterForm';
+import CharacterCard from './CharacterCard'; // 1. Import the new component
 import './App.css';
 
 function App() {
@@ -16,9 +17,7 @@ function App() {
     fetchCharacters();
   }, []);
 
-  // Function to handle the delete action
   const handleDelete = async (id) => {
-    // Adding a quick confirmation dialog so users don't accidentally delete records
     if (!window.confirm("Are you sure you want to delete this character?")) return;
 
     try {
@@ -27,7 +26,6 @@ function App() {
       });
 
       if (response.ok) {
-        // If successful, re-fetch the list to update the UI
         fetchCharacters();
       } else {
         console.error('Failed to delete character');
@@ -45,19 +43,12 @@ function App() {
       
       <div className="character-grid">
         {characters.map(character => (
-          <div key={character.id} className="character-card">
-            <h2>{character.name}</h2>
-            <h3>"{character.alias}"</h3>
-            <p><strong>Origin:</strong> {character.origin_name}</p>
-            
-            {/* The delete button */}
-            <button 
-              className="delete-button" 
-              onClick={() => handleDelete(character.id)}
-            >
-              Delete
-            </button>
-          </div>
+          /* 2. Pass the data and the delete function down as props */
+          <CharacterCard 
+            key={character.id} 
+            character={character} 
+            onDelete={handleDelete} 
+          />
         ))}
       </div>
     </div>

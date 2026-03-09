@@ -62,7 +62,12 @@ app.get('/api/characters', async (req, res) => {
 app.get('/api/characters-detailed', async (req, res) => {
     try {
         const query = `
-            SELECT characters.id, characters.name, characters.alias, origins.name AS origin_name 
+            SELECT 
+                characters.id, 
+                characters.name, 
+                characters.alias, 
+                characters.core_traits, 
+                origins.name AS origin_name 
             FROM characters 
             LEFT JOIN origins ON characters.origin_id = origins.id;
         `;

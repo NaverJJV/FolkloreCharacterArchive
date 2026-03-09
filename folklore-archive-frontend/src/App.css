@@ -2,7 +2,7 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: sans-serif;
+  font-family: "Calibri", sans-serif;
 }
 
 .character-grid {
@@ -31,12 +31,48 @@
   font-size: 1rem;
 }
 
+.character-card p {
+  color: #000;
+}
+
 .add-character-form {
   background-color: #f0f4f8;
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-  border: 1px solid #d1d9e0;
+  border: 3px solid #3700ff;
+}
+
+.add-character-form h2 {
+  color: #1a1a1a;
+  margin-top: 0;
+}
+
+.character-details {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.card-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 1.5rem;
+}
+
+.toggle-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1; /* Makes the button take up equal space */
+}
+
+.toggle-button:hover {
+  background-color: #5a6268;
 }
 
 .form-group {
@@ -83,6 +119,8 @@ button[type="submit"]:hover {
   cursor: pointer;
   margin-top: 1rem;
   width: 100%;
+  flex: 1;
+  margin-top: 0;
 }
 
 .delete-button:hover {
