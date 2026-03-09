@@ -1,5 +1,5 @@
 const express = require('express');
-const { Pool } = require('pg');
+const {Pool} = require('pg');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -84,21 +84,27 @@ app.post('/api/characters', async (req, res) => {
     try {
         const { name, alias, core_traits, origin_name } = req.body;
 
-        // Check if origin exists, if not, create it
-        let originResult = await pool.query('SELECT id FROM origins WHERE name = $1', [origin_name]);
-        
+        // NEW: Backend Validation
+        if (!origin_name || origin_name.trim() === "") {
+            return res.status(400).json({ message: "Origin name is required" });
+        }
+
+        // 1. Check if origin exists
+        let originResult = await pool.query('SELECT id FROM origins WHERE name = $1', [origin_name.trim()]);
+
         let originId;
         if (originResult.rows.length > 0) {
             originId = originResult.rows[0].id;
         } else {
+            // 2. Create it if it doesn't
             const newOrigin = await pool.query(
-                'INSERT INTO origins (name) VALUES ($1) RETURNING id', 
-                [origin_name]
+                'INSERT INTO origins (name) VALUES ($1) RETURNING id',
+                [origin_name.trim()]
             );
             originId = newOrigin.rows[0].id;
         }
 
-        // Create the character using the originId
+        // 3. Create the character
         const newCharacter = await pool.query(
             'INSERT INTO characters (name, alias, core_traits, origin_id) VALUES ($1, $2, $3, $4) RETURNING *',
             [name, alias, core_traits, originId]
@@ -106,8 +112,8 @@ app.post('/api/characters', async (req, res) => {
 
         res.json(newCharacter.rows[0]);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
+        console.error("DATABASE ERROR:", err.message);
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -115,21 +121,21 @@ app.post('/api/characters', async (req, res) => {
 app.delete('/api/characters/:id', async (req, res) => {
     try {
         // Grab the ID from the URL parameters
-        const { id } = req.params;
+        const {id} = req.params;
 
         // Execute the DELETE SQL query
         const deleteQuery = await pool.query(
-            'DELETE FROM characters WHERE id = $1 RETURNING *', 
+            'DELETE FROM characters WHERE id = $1 RETURNING *',
             [id]
         );
 
         // Check if a character was actually found and deleted
         if (deleteQuery.rowCount === 0) {
-            return res.status(404).json({ message: "Character not found" });
+            return res.status(404).json({message: "Character not found"});
         }
 
         // Send a success response
-        res.json({ message: "Character deleted successfully" });
+        res.json({message: "Character deleted successfully"});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
@@ -140,10 +146,10 @@ app.delete('/api/characters/:id', async (req, res) => {
 app.put('/api/characters/:id', async (req, res) => {
     try {
         // Grab the ID from the URL parameters
-        const { id } = req.params;
-        
+        const {id} = req.params;
+
         // Grab the updated data from the request body
-        const { name, alias, core_traits, origin_id } = req.body;
+        const {name, alias, core_traits, origin_id} = req.body;
 
         // Execute the UPDATE SQL query
         const updateQuery = await pool.query(
@@ -153,7 +159,7 @@ app.put('/api/characters/:id', async (req, res) => {
 
         // Check if the character existed
         if (updateQuery.rowCount === 0) {
-            return res.status(404).json({ message: "Character not found" });
+            return res.status(404).json({message: "Character not found"});
         }
 
         // Send back the updated character

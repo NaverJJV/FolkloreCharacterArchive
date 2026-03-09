@@ -20,25 +20,30 @@ function AddCharacterForm({onCharacterAdded}) {
 
     // Handle the form submission
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevents the browser from reloading the page
+        e.preventDefault();
+
+        // Guard clause: Don't even try to send if the origin name is blank
+        if (!formData.origin_name.trim()) {
+            alert("Please enter an origin name.");
+            return;
+        }
 
         try {
             const response = await fetch('http://localhost:3000/api/characters', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                // Clear the form after a successful submission
-                setFormData({name: '', alias: '', core_traits: '', origin_id: 1});
-
-                // Notify the parent component (App.jsx) that a new character was added
+                // RESET: Ensure every key matches your initial state exactly
+                setFormData({
+                    name: '',
+                    alias: '',
+                    core_traits: '',
+                    origin_name: '' // Ensure this matches the 'name' attribute below
+                });
                 onCharacterAdded();
-            } else {
-                console.error('Failed to add character');
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -66,17 +71,17 @@ function AddCharacterForm({onCharacterAdded}) {
             </div>
 
             <div className="form-group">
-  <label htmlFor="origin_name">Origin (Era or Setting):</label>
-  <input 
-    type="text" 
-    id="origin_name" 
-    name="origin_name" 
-    placeholder="e.g. 19th Century America"
-    value={formData.origin_name} 
-    onChange={handleChange} 
-    required 
-  />
-</div>
+                <label htmlFor="origin_name">Origin (Era or Setting):</label>
+                <input
+                    type="text"
+                    id="origin_name"
+                    name="origin_name"
+                    placeholder="e.g. 19th Century America"
+                    value={formData.origin_name}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
 
             <button type="submit">Add Character</button>
         </form>
