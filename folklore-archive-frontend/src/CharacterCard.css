@@ -1,0 +1,90 @@
+.character-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.character-card h2 {
+    margin-top: 0;
+    color: #000000;
+}
+
+.character-card h3 {
+    color: #666;
+    font-style: italic;
+    font-size: 1rem;
+}
+
+.character-card p {
+    color: #000;
+}
+
+.character-details {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 1.5rem;
+}
+
+.toggle-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.toggle-button:hover {
+    background-color: #5a6268;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+    margin-top: 0;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.edit-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.edit-button:hover {
+    background-color: #218838;
+}
+
+.edit-mode .form-group {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.edit-mode .form-group label {
+    font-size: 0.8rem;
+    color: #666;
+}

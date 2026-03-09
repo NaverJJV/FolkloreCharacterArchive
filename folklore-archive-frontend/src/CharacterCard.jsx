@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import './CharacterCard.css';
 
 function CharacterCard({character, onDelete, onEdit}) {
     const [isExpanded, setIsExpanded] = useState(false);

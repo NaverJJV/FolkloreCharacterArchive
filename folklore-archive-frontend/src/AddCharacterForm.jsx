@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import './AddCharacterForm.css';
 
 function AddCharacterForm({onCharacterAdded}) {
     // State to hold the form data
