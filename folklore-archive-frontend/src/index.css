@@ -139,7 +139,7 @@ button:active {
   color: var(--color-ink-muted);
   font-style: italic;
   text-align: right;
-  margin-top: 0.75rem;
+  margin-top: auto;
   padding-top: 0.5rem;
   border-top: 1px dotted var(--border-light);
 }
