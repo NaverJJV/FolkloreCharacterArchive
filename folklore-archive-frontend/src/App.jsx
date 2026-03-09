@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import AddCharacterForm from './AddCharacterForm';
 import CharacterCard from './CharacterCard';
-import OriginsManager from './OriginsManager'; // Import the new page
+import OriginsManager from './OriginsManager';
+import StoriesManager from './StoriesManager';
 import './App.css';
 
 function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) {
@@ -37,8 +38,11 @@ function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) 
 
     return (
         <>
-            <nav className="main-nav">
-                <Link to="/origins" className="nav-link">Manage Origins Library</Link>
+            <nav className="stories-nav">
+                <Link to="/stories" className="nav-link">Story Library</Link>
+            </nav>
+            <nav className="origins-nav">
+                <Link to="/origins" className="nav-link">Origins Library</Link>
             </nav>
 
             <AddCharacterForm onCharacterAdded={fetchCharacters} />
@@ -150,6 +154,7 @@ function App() {
                         />
                     } />
                     <Route path="/origins" element={<OriginsManager />} />
+                    <Route path="/stories" element={<StoriesManager />} />
                 </Routes>
             </div>
         </Router>

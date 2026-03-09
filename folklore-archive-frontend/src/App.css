@@ -30,7 +30,9 @@
 /* ═══════════════════════════════════════════════
    NAVIGATION
 ═══════════════════════════════════════════════ */
-.main-nav {
+.stories-nav,
+.origins-nav,
+.main-nav{
   background-color: var(--surface-nav);
   border-radius: var(--radius-md);
   padding: 0.85rem 1.4rem;

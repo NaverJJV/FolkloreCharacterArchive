@@ -306,3 +306,89 @@ app.post('/api/origins', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+// GET all stories
+app.get('/api/stories', async (req, res) => {
+    try {
+        const allStories = await pool.query('SELECT * FROM stories ORDER BY publication_date DESC NULLS LAST, title ASC');
+        res.json(allStories.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// POST a new story
+app.post('/api/stories', async (req, res) => {
+    try {
+        const { title, synopsis, publication_date } = req.body;
+
+        if (!title || title.trim() === "") {
+            return res.status(400).json({ message: "Story title is required" });
+        }
+
+        // Handle empty dates by inserting null instead of an empty string
+        const pubDate = publication_date ? publication_date : null;
+
+        const newStory = await pool.query(
+            'INSERT INTO stories (title, synopsis, publication_date) VALUES ($1, $2, $3) RETURNING *',
+            [title.trim(), synopsis, pubDate]
+        );
+
+        res.json(newStory.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// UPDATE an existing story
+app.put('/api/stories/:id', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
+
+        const { title, synopsis, publication_date } = req.body;
+        if (!title || title.trim() === "") return res.status(400).json({ message: "Title is required" });
+
+        const pubDate = publication_date ? publication_date : null;
+
+        const updateStory = await pool.query(
+            'UPDATE stories SET title = $1, synopsis = $2, publication_date = $3 WHERE id = $4 RETURNING *',
+            [title.trim(), synopsis, pubDate, id]
+        );
+
+        if (updateStory.rowCount === 0) return res.status(404).json({ message: "Story not found" });
+        res.json(updateStory.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// DELETE a story
+app.delete('/api/stories/:id', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
+
+        // Check if any characters are linked to this story before deleting
+        const characterCheck = await pool.query(
+            'SELECT characters.name FROM character_stories JOIN characters ON character_stories.character_id = characters.id WHERE story_id = $1 LIMIT 3',
+            [id]
+        );
+
+        if (characterCheck.rows.length > 0) {
+            const names = characterCheck.rows.map(c => c.name).join(', ');
+            return res.status(400).json({
+                message: `Cannot delete this story. It is still linked to ${names}.`
+            });
+        }
+
+        await pool.query('DELETE FROM stories WHERE id = $1', [id]);
+        res.json({ message: "Story deleted successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
