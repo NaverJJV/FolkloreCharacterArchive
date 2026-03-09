@@ -82,17 +82,28 @@ app.get('/api/characters-detailed', async (req, res) => {
 // POST a new character
 app.post('/api/characters', async (req, res) => {
     try {
-        // 1. Extract the data from the incoming request body
-        const { name, alias, core_traits, origin_id } = req.body;
+        const { name, alias, core_traits, origin_name } = req.body;
 
-        // 2. Write the SQL query using parameterized inputs for security
-        // The "RETURNING *" clause tells PostgreSQL to send back the row it just created
+        // Check if origin exists, if not, create it
+        let originResult = await pool.query('SELECT id FROM origins WHERE name = $1', [origin_name]);
+        
+        let originId;
+        if (originResult.rows.length > 0) {
+            originId = originResult.rows[0].id;
+        } else {
+            const newOrigin = await pool.query(
+                'INSERT INTO origins (name) VALUES ($1) RETURNING id', 
+                [origin_name]
+            );
+            originId = newOrigin.rows[0].id;
+        }
+
+        // Create the character using the originId
         const newCharacter = await pool.query(
             'INSERT INTO characters (name, alias, core_traits, origin_id) VALUES ($1, $2, $3, $4) RETURNING *',
-            [name, alias, core_traits, origin_id]
+            [name, alias, core_traits, originId]
         );
 
-        // 3. Send the newly created character back to the client as proof of success
         res.json(newCharacter.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -103,21 +114,21 @@ app.post('/api/characters', async (req, res) => {
 // DELETE a character
 app.delete('/api/characters/:id', async (req, res) => {
     try {
-        // 1. Grab the ID from the URL parameters
+        // Grab the ID from the URL parameters
         const { id } = req.params;
 
-        // 2. Execute the DELETE SQL query
+        // Execute the DELETE SQL query
         const deleteQuery = await pool.query(
             'DELETE FROM characters WHERE id = $1 RETURNING *', 
             [id]
         );
 
-        // 3. Check if a character was actually found and deleted
+        // Check if a character was actually found and deleted
         if (deleteQuery.rowCount === 0) {
             return res.status(404).json({ message: "Character not found" });
         }
 
-        // 4. Send a success response
+        // Send a success response
         res.json({ message: "Character deleted successfully" });
     } catch (err) {
         console.error(err.message);
@@ -128,24 +139,24 @@ app.delete('/api/characters/:id', async (req, res) => {
 // PUT (update) an existing character
 app.put('/api/characters/:id', async (req, res) => {
     try {
-        // 1. Grab the ID from the URL parameters
+        // Grab the ID from the URL parameters
         const { id } = req.params;
         
-        // 2. Grab the updated data from the request body
+        // Grab the updated data from the request body
         const { name, alias, core_traits, origin_id } = req.body;
 
-        // 3. Execute the UPDATE SQL query
+        // Execute the UPDATE SQL query
         const updateQuery = await pool.query(
             'UPDATE characters SET name = $1, alias = $2, core_traits = $3, origin_id = $4 WHERE id = $5 RETURNING *',
             [name, alias, core_traits, origin_id, id]
         );
 
-        // 4. Check if the character existed
+        // Check if the character existed
         if (updateQuery.rowCount === 0) {
             return res.status(404).json({ message: "Character not found" });
         }
 
-        // 5. Send back the updated character
+        // Send back the updated character
         res.json(updateQuery.rows[0]);
     } catch (err) {
         console.error(err.message);
