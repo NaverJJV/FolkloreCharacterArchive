@@ -1,15 +1,54 @@
 import { useState } from 'react';
 
-function CharacterCard({ character, onDelete }) {
-  // Local state to track if this specific card is expanded
+function CharacterCard({ character, onDelete, onEdit }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // Local state just for the edit form
+  const [editData, setEditData] = useState({
+    name: character.name,
+    alias: character.alias,
+    core_traits: character.core_traits || '',
+    origin_id: character.origin_id || 1
+  });
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditData({ ...editData, [name]: value });
+  };
+
+  const submitEdit = () => {
+    onEdit(character.id, editData);
+    setIsEditing(false); // Close the edit form after saving
+  };
+
+  // If the card is in Edit Mode, render a form
+  if (isEditing) {
+    return (
+      <div className="character-card edit-mode">
+        <input type="text" name="name" value={editData.name} onChange={handleChange} />
+        <input type="text" name="alias" value={editData.alias} onChange={handleChange} />
+        <textarea name="core_traits" value={editData.core_traits} onChange={handleChange} />
+        <select name="origin_id" value={editData.origin_id} onChange={handleChange}>
+          <option value={1}>Post-Civil War America</option>
+          <option value={2}>American Frontier</option>
+          <option value={3}>6th Century Britain</option>
+        </select>
+        
+        <div className="card-actions">
+          <button className="toggle-button" onClick={submitEdit}>Save</button>
+          <button className="delete-button" onClick={() => setIsEditing(false)}>Cancel</button>
+        </div>
+      </div>
+    );
+  }
+
+  // Otherwise, render the standard display
   return (
     <div className="character-card">
       <h2>{character.name}</h2>
       <h3>"{character.alias}"</h3>
       
-      {/* This section only renders if isExpanded is true */}
       {isExpanded && (
         <div className="character-details">
           <p><strong>Origin:</strong> {character.origin_name}</p>
@@ -18,20 +57,11 @@ function CharacterCard({ character, onDelete }) {
       )}
       
       <div className="card-actions">
-        {/* Toggle button that flips the boolean state */}
-        <button 
-          className="toggle-button" 
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
+        <button className="toggle-button" onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? 'Show Less' : 'Show Details'}
         </button>
-
-        <button 
-          className="delete-button" 
-          onClick={() => onDelete(character.id)}
-        >
-          Delete
-        </button>
+        <button className="edit-button" onClick={() => setIsEditing(true)}>Edit</button>
+        <button className="delete-button" onClick={() => onDelete(character.id)}>Delete</button>
       </div>
     </div>
   );

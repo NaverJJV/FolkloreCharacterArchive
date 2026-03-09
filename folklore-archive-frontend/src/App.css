@@ -126,3 +126,32 @@ button[type="submit"]:hover {
 .delete-button:hover {
   background-color: #c82333;
 }
+
+.edit-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.edit-button:hover {
+  background-color: #218838;
+}
+
+.edit-mode input, .edit-mode textarea, .edit-mode select {
+  width: 90%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.edit-mode textarea {
+  resize: vertical;
+  min-height: 60px;
+}

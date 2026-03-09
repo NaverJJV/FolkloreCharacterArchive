@@ -124,3 +124,31 @@ app.delete('/api/characters/:id', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+// PUT (update) an existing character
+app.put('/api/characters/:id', async (req, res) => {
+    try {
+        // 1. Grab the ID from the URL parameters
+        const { id } = req.params;
+        
+        // 2. Grab the updated data from the request body
+        const { name, alias, core_traits, origin_id } = req.body;
+
+        // 3. Execute the UPDATE SQL query
+        const updateQuery = await pool.query(
+            'UPDATE characters SET name = $1, alias = $2, core_traits = $3, origin_id = $4 WHERE id = $5 RETURNING *',
+            [name, alias, core_traits, origin_id, id]
+        );
+
+        // 4. Check if the character existed
+        if (updateQuery.rowCount === 0) {
+            return res.status(404).json({ message: "Character not found" });
+        }
+
+        // 5. Send back the updated character
+        res.json(updateQuery.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});

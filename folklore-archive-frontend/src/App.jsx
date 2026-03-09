@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import AddCharacterForm from './AddCharacterForm';
-import CharacterCard from './CharacterCard'; // 1. Import the new component
+import CharacterCard from './CharacterCard';
 import './App.css';
 
 function App() {
@@ -35,6 +35,27 @@ function App() {
     }
   };
 
+  const handleEdit = async (id, updatedData) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/characters/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (response.ok) {
+        // Re-fetch the list to show the updated data
+        fetchCharacters();
+      } else {
+        console.error('Failed to update character');
+      }
+    } catch (error) {
+      console.error('Error updating character:', error);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Folklore & Character Archive</h1>
@@ -43,11 +64,11 @@ function App() {
       
       <div className="character-grid">
         {characters.map(character => (
-          /* 2. Pass the data and the delete function down as props */
           <CharacterCard 
             key={character.id} 
             character={character} 
-            onDelete={handleDelete} 
+            onDelete={handleDelete}
+            onEdit={handleEdit}
           />
         ))}
       </div>
