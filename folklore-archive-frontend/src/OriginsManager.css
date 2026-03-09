@@ -1,17 +1,33 @@
+/* ═══════════════════════════════════════════════
+   ORIGINS MANAGER PAGE
+═══════════════════════════════════════════════ */
+.origins-manager > h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.04em;
+    position: relative;
+}
+
+.origins-manager > h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    margin: 0.5rem 0 1.75rem;
+}
+
 .origins-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    text-align: left;
+    gap: 1rem;
 }
 
-.origins-manager .edit-button {
-    margin-top: 1rem;
-    max-width: 150px;
+/* Scoped button size overrides for origins manager context */
+.origins-manager .edit-button,
+.origins-manager .toggle-button,
+.origins-manager .delete-button {
+    flex: 0 0 auto;
+    min-width: 120px;
+    max-width: 160px;
 }
-
-.origins-manager .toggle-button {
-    margin-top: 1rem;
-    max-width: 150px;
-}
-

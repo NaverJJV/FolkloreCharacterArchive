@@ -1,50 +1,127 @@
+/* ═══════════════════════════════════════════════
+   ORIGIN ROW
+═══════════════════════════════════════════════ */
 .origin-item {
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: white;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+    transition:
+            transform var(--transition-smooth),
+            box-shadow var(--transition-smooth),
+            background-color var(--transition-smooth);
 }
 
-.origin-item h3 {
-    color: #000;
+/* Left accent bar */
+.origin-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--color-gold), var(--color-ember));
+    opacity: 0;
+    transition: opacity var(--transition-smooth);
 }
 
-.origin-item p {
-    color: #000;
+.origin-item:hover {
+    transform: translateX(3px);
+    box-shadow: var(--shadow-card-hover);
+    background-color: var(--surface-card-hover);
 }
 
-.origin-item .card-actions {
-    margin-top: 1rem;
+.origin-item:hover::before {
+    opacity: 1;
 }
 
+/* ── Origin Header ────────────────────────────── */
 .origin-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border-light);
+    gap: 1rem;
 }
 
+.origin-item h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0;
+    letter-spacing: 0.02em;
+}
+
+/* ── Era Badge ────────────────────────────────── */
 .era-badge {
-    background: #e9ecef;
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    color: #495057;
-    font-weight: bold;
+    background-color: var(--color-parchment-dark);
+    color: var(--color-ink-soft);
+    border: 1px solid var(--border-medium);
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
-.origin-item.edit-mode input {
-    width: 90%;
-    margin-bottom: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: inherit;
+/* ── Description ──────────────────────────────── */
+.origin-item > p {
+    font-size: 0.95rem;
+    color: var(--color-ink-soft);
+    line-height: 1.6;
+    margin: 0 0 1rem;
+    font-style: italic;
+}
+
+/* ── Card Actions ─────────────────────────────── */
+.origin-item .card-actions {
+    display: flex;
+    gap: 0.5rem;
+    padding-top: 0;
+    margin-top: 0;
+    justify-content: flex-start;
+}
+
+/* ── Edit Mode ────────────────────────────────── */
+.origin-item.edit-mode {
+    background-color: var(--surface-form);
+}
+
+.origin-item.edit-mode input,
+.origin-item.edit-mode textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.6rem;
+    padding: 0.55rem 0.8rem;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.97rem;
+    color: var(--color-ink);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.origin-item.edit-mode input:focus,
+.origin-item.edit-mode textarea:focus {
+    outline: none;
+    border-color: var(--color-ember);
+    box-shadow: 0 0 0 3px rgba(139, 58, 26, 0.1);
 }
 
 .origin-item.edit-mode textarea {
-    width: 90%;
+    resize: vertical;
     min-height: 80px;
-    margin-top: 10px;
+}
+
+.origin-item .card-actions {
+    margin-top: 0.9rem;
 }

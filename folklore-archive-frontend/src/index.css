@@ -1,66 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+/* ═══════════════════════════════════════════════
+   FOLKLORE ARCHIVE — DESIGN TOKENS
+   Palette: aged parchment, deep forest, ember glow
+═══════════════════════════════════════════════ */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Core palette */
+  --color-parchment:      #f5efe0;
+  --color-parchment-dark: #e8ddc8;
+  --color-parchment-deep: #d4c5a9;
+  --color-ink:            #2c1f0e;
+  --color-ink-soft:       #4a3728;
+  --color-ink-muted:      #6b5544;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Accent — ember & moss */
+  --color-ember:          #8b3a1a;
+  --color-ember-light:    #b85c35;
+  --color-ember-glow:     #d4763b;
+  --color-moss:           #3d5a3e;
+  --color-moss-light:     #5a7d5b;
+  --color-gold:           #b8932a;
+  --color-gold-light:     #d4b04a;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Functional */
+  --color-danger:         #7a2020;
+  --color-danger-hover:   #9c2c2c;
+  --color-success:        #2e5c2f;
+
+  /* Surfaces */
+  --surface-page:         #ede4d0;
+  --surface-card:         #f8f3e8;
+  --surface-card-hover:   #fdf9f0;
+  --surface-form:         #f2ead8;
+  --surface-nav:          #2c1f0e;
+
+  /* Borders */
+  --border-light:         rgba(107, 85, 68, 0.2);
+  --border-medium:        rgba(107, 85, 68, 0.4);
+  --border-strong:        rgba(44, 31, 14, 0.6);
+
+  /* Shadows */
+  --shadow-card:          0 2px 8px rgba(44, 31, 14, 0.12), 0 1px 3px rgba(44, 31, 14, 0.08);
+  --shadow-card-hover:    0 8px 24px rgba(44, 31, 14, 0.18), 0 3px 8px rgba(44, 31, 14, 0.12);
+  --shadow-nav:           0 2px 12px rgba(44, 31, 14, 0.35);
+  --shadow-button:        0 2px 6px rgba(44, 31, 14, 0.25);
+
+  /* Typography */
+  --font-display:         'Cinzel', Georgia, serif;
+  --font-body:            'Crimson Pro', 'Georgia', serif;
+
+  /* Spacing */
+  --radius-sm:    4px;
+  --radius-md:    8px;
+  --radius-lg:    12px;
+
+  /* Transitions */
+  --transition-fast:   150ms ease;
+  --transition-smooth: 250ms ease;
+  --transition-slow:   400ms ease;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
-a:hover {
-  color: #535bf2;
+
+html {
+  font-size: 16px;
 }
 
 body {
   margin: 0;
-  min-width: 320px;
   min-height: 100vh;
+  background-color: var(--surface-page);
+  background-image:
+          radial-gradient(ellipse at 20% 0%, rgba(139, 58, 26, 0.06) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 100%, rgba(61, 90, 62, 0.06) 0%, transparent 50%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  line-height: 1.2;
+  margin-top: 0;
 }
 
+a {
+  color: var(--color-ember);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-ember-glow);
+}
+
+/* ═══════════════════════════════════════════════
+   GLOBAL BUTTON BASE
+   (component files override with specific classes)
+═══════════════════════════════════════════════ */
 button {
-  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition:
+          background-color var(--transition-smooth),
+          color var(--transition-smooth),
+          box-shadow var(--transition-smooth),
+          transform var(--transition-fast),
+          border-color var(--transition-smooth);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 2px;
+}
+
+button:active {
+  transform: translateY(1px);
 }
