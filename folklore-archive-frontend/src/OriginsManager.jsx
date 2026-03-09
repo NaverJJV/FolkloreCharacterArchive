@@ -6,7 +6,8 @@ import './OriginsManager.css';
 
 function OriginsManager() {
     const [origins, setOrigins] = useState([]);
-    const [error, setError] = useState(null); // New state for errors
+    const [error, setError] = useState(null); // Error State
+    const [searchTerm, setSearchTerm] = useState(''); // Search State
 
     const fetchOrigins = () => {
         fetch('http://localhost:3000/api/origins')
@@ -63,6 +64,17 @@ function OriginsManager() {
         }
     };
 
+    const filteredOrigins = origins.filter(origin => {
+        const searchLower = searchTerm.toLowerCase();
+
+        // We use (origin.field || '') to prevent crashes if a field is null in the database
+        const nameMatch = (origin.name || '').toLowerCase().includes(searchLower);
+        const eraMatch = (origin.historical_era || '').toLowerCase().includes(searchLower);
+        const descMatch = (origin.description || '').toLowerCase().includes(searchLower);
+
+        return nameMatch || eraMatch || descMatch;
+    });
+
     return (
         <div className="origins-manager">
             <nav className="main-nav">
@@ -82,10 +94,23 @@ function OriginsManager() {
                 </div>
             )}
 
-            <AddOriginForm onOriginAdded={fetchOrigins}/>
+            <AddOriginForm onOriginAdded={fetchOrigins} />
+
+            {/* 3. The Search Bar */}
+            <div className="search-filter-bar" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
+                <input
+                    type="text"
+                    placeholder="Search by name, era, or description..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                    style={{ flex: 1, maxWidth: '600px' }}
+                />
+            </div>
 
             <div className="origins-list">
-                {origins.map(origin => (
+                {/* 4. Map over filteredOrigins instead of origins */}
+                {filteredOrigins.map(origin => (
                     <OriginRow
                         key={origin.id}
                         origin={origin}
@@ -93,6 +118,13 @@ function OriginsManager() {
                         onDelete={handleDeleteOrigin}
                     />
                 ))}
+
+                {/* Optional: Show a message if the search yields no results */}
+                {filteredOrigins.length === 0 && (
+                    <p style={{ textAlign: 'center', color: 'var(--color-ink-muted)', fontStyle: 'italic' }}>
+                        No origins match your search.
+                    </p>
+                )}
             </div>
         </div>
     );
