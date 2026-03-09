@@ -13,7 +13,7 @@ const seedDatabase = async () => {
     try {
         console.log('Connecting to database...');
 
-        // 1. Drop existing tables to start fresh
+        // Drop existing tables to start fresh
         console.log('Dropping existing tables...');
         await pool.query(`
             DROP TABLE IF EXISTS character_stories CASCADE;
@@ -22,7 +22,7 @@ const seedDatabase = async () => {
             DROP TABLE IF EXISTS origins CASCADE;
         `);
 
-        // 2. Create the tables
+        // Create the tables
         console.log('Creating tables...');
         await pool.query(`
             CREATE TABLE origins (
@@ -55,7 +55,7 @@ const seedDatabase = async () => {
             );
         `);
 
-        // 3. Insert the test data
+        // Insert the test data
         console.log('Inserting sample data...');
         await pool.query(`
             INSERT INTO origins (name, historical_era, description) VALUES
