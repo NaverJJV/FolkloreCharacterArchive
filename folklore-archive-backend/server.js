@@ -283,3 +283,26 @@ app.delete('/api/origins/:id', async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 });
+
+// POST a new origin
+app.post('/api/origins', async (req, res) => {
+    try {
+        const { name, historical_era, description } = req.body;
+        const error = validateCharacterInput(req.body);
+        if (error) return res.status(400).json({ message: error });
+
+        if (!name || name.trim() === "") {
+            return res.status(400).json({ message: "Origin name is required" });
+        }
+
+        const newOrigin = await pool.query(
+            'INSERT INTO origins (name, historical_era, description) VALUES ($1, $2, $3) RETURNING *',
+            [name.trim(), historical_era, description]
+        );
+
+        res.json(newOrigin.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});

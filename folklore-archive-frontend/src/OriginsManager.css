@@ -24,7 +24,6 @@
 }
 
 /* Scoped button size overrides for origins manager context */
-.origins-manager .edit-button,
 .origins-manager .toggle-button,
 .origins-manager .delete-button {
     flex: 0 0 auto;

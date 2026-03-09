@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import OriginRow from './OriginRow';
+import AddOriginForm from './AddOriginForm';
+import './OriginsManager.css';
 
 function OriginsManager() {
     const [origins, setOrigins] = useState([]);
@@ -13,7 +15,9 @@ function OriginsManager() {
             .catch(err => console.error(err));
     };
 
-    useEffect(() => { fetchOrigins(); }, []);
+    useEffect(() => {
+        fetchOrigins();
+    }, []);
 
     const handleDeleteOrigin = async (id) => {
         setError(null); // Clear previous errors
@@ -67,7 +71,6 @@ function OriginsManager() {
 
             <h1>Origins Library</h1>
 
-            {/* Visual Error Notification */}
             {error && (
                 <div className="error-banner">
                     <div className="error-content">
@@ -78,6 +81,8 @@ function OriginsManager() {
                     </button>
                 </div>
             )}
+
+            <AddOriginForm onOriginAdded={fetchOrigins}/>
 
             <div className="origins-list">
                 {origins.map(origin => (

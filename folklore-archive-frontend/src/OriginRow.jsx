@@ -46,6 +46,19 @@ function OriginRow({origin, onUpdate, onDelete}) {
 
     return (
         <div className="origin-item">
+            {/* NEW: The top-right X button */}
+            <button
+                className="delete-x-button"
+                title="Delete Origin"
+                onClick={() => {
+                    if (window.confirm(`Are you sure you want to delete ${origin.name}?`)) {
+                        onDelete(origin.id);
+                    }
+                }}
+            >
+                &times;
+            </button>
+
             <div className="origin-header">
                 <h3>{origin.name}</h3>
                 <span className="era-badge">{origin.historical_era || "Unknown Era"}</span>
@@ -54,16 +67,6 @@ function OriginRow({origin, onUpdate, onDelete}) {
 
             <div className="card-actions">
                 <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Details</button>
-                <button
-                    className="delete-button"
-                    onClick={() => {
-                        if (window.confirm(`Are you sure you want to delete ${origin.name}?`)) {
-                            onDelete(origin.id); // This was crashing because onDelete was undefined
-                        }
-                    }}
-                >
-                    Delete
-                </button>
             </div>
         </div>
     );

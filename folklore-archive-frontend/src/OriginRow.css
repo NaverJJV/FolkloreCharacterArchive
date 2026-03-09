@@ -125,3 +125,36 @@
 .origin-item .card-actions {
     margin-top: 0.9rem;
 }
+
+.delete-x-button {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--color-ink-muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: none;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.delete-x-button:hover {
+    color: var(--color-danger);
+    transform: scale(1.15);
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+/* Add some right padding so the text doesn't overlap the X */
+.origin-header {
+    padding-right: 1.5rem;
+}
+
+/* Allow the edit button to take up the full width for a cleaner look */
+.origin-item .card-actions .edit-button {
+    width: 100%;
+}
