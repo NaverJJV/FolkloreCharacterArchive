@@ -72,3 +72,19 @@ button[type="submit"] {
 button[type="submit"]:hover {
   background-color: #004494;
 }
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}

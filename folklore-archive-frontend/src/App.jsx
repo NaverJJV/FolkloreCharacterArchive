@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import AddCharacterForm from './AddCharacterForm'; // Import the new component
+import AddCharacterForm from './AddCharacterForm';
 import './App.css';
 
 function App() {
   const [characters, setCharacters] = useState([]);
 
-  // Moving the fetch logic into its own function so we can call it repeatedly
   const fetchCharacters = () => {
     fetch('http://localhost:3000/api/characters-detailed')
       .then(response => response.json())
@@ -13,16 +12,35 @@ function App() {
       .catch(error => console.error('Error fetching data:', error));
   };
 
-  // Run the fetch when the component first loads
   useEffect(() => {
     fetchCharacters();
   }, []);
+
+  // Function to handle the delete action
+  const handleDelete = async (id) => {
+    // Adding a quick confirmation dialog so users don't accidentally delete records
+    if (!window.confirm("Are you sure you want to delete this character?")) return;
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/characters/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // If successful, re-fetch the list to update the UI
+        fetchCharacters();
+      } else {
+        console.error('Failed to delete character');
+      }
+    } catch (error) {
+      console.error('Error deleting character:', error);
+    }
+  };
 
   return (
     <div className="App">
       <h1>Folklore & Character Archive</h1>
       
-      {/* Render the form and pass the fetch function as a prop */}
       <AddCharacterForm onCharacterAdded={fetchCharacters} />
       
       <div className="character-grid">
@@ -31,6 +49,14 @@ function App() {
             <h2>{character.name}</h2>
             <h3>"{character.alias}"</h3>
             <p><strong>Origin:</strong> {character.origin_name}</p>
+            
+            {/* The delete button */}
+            <button 
+              className="delete-button" 
+              onClick={() => handleDelete(character.id)}
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>

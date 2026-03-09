@@ -94,3 +94,28 @@ app.post('/api/characters', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+// DELETE a character
+app.delete('/api/characters/:id', async (req, res) => {
+    try {
+        // 1. Grab the ID from the URL parameters
+        const { id } = req.params;
+
+        // 2. Execute the DELETE SQL query
+        const deleteQuery = await pool.query(
+            'DELETE FROM characters WHERE id = $1 RETURNING *', 
+            [id]
+        );
+
+        // 3. Check if a character was actually found and deleted
+        if (deleteQuery.rowCount === 0) {
+            return res.status(404).json({ message: "Character not found" });
+        }
+
+        // 4. Send a success response
+        res.json({ message: "Character deleted successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
