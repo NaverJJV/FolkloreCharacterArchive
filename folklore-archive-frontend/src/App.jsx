@@ -44,7 +44,7 @@ function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) 
                 <Link to="/stories" className="nav-link">Story Library</Link>
             </nav>
             <nav className="origins-nav">
-                <Link to="/origins" className="nav-link">Origins Library</Link>
+                <Link to="/origins" className="nav-link">Manage Eras Library</Link>
             </nav>
 
             <RecentStories />

@@ -29,7 +29,7 @@ function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
             <h3>"{char.alias}"</h3>
 
             <div className="character-details" style={{ display: 'block', borderTop: 'none', marginTop: '0.5rem', paddingTop: '0' }}>
-                <p><strong>Origin:</strong> {char.origin_name}</p>
+                <p><strong>Era:</strong> {char.origin_name}</p>
 
                 <div style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: 'var(--surface-form)', borderRadius: 'var(--radius-sm)' }}>
                     <strong>Role:</strong>

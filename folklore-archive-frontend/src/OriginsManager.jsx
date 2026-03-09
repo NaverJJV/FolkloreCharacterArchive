@@ -81,7 +81,7 @@ function OriginsManager() {
                 <Link to="/" className="back-link">← Back to Character Archive</Link>
             </nav>
 
-            <h1>Origins Library</h1>
+            <h1>Eras Library</h1>
 
             {error && (
                 <div className="error-banner">

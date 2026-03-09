@@ -57,7 +57,7 @@ function AddCharacterForm({onCharacterAdded}) {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="origin_name">Origin (Era or Setting):</label>
+                        <label htmlFor="origin_name">Era (Setting or Time Period):</label>
                         <input type="text" id="origin_name" name="origin_name" value={formData.origin_name}
                                onChange={handleChange} required maxLength={255}/>
                     </div>

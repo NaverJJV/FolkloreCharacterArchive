@@ -58,7 +58,7 @@ function CharacterCard({character, onDelete, onEdit}) {
 
             {isExpanded && (
                 <div className="character-details">
-                    <p><strong>Origin:</strong> {character.origin_name}</p>
+                    <p><strong>Era:</strong> {character.origin_name}</p>
                     <p><strong>Core Traits:</strong> {character.core_traits}</p>
                 </div>
             )}
