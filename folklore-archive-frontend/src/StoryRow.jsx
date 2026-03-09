@@ -2,9 +2,7 @@ import { Link } from 'react-router-dom';
 import './OriginRow.css';
 
 function StoryRow({ story, onDelete }) {
-    const formattedDate = story.publication_date
-        ? new Date(story.publication_date).toLocaleDateString()
-        : "Unknown Date";
+    const displayDate = story.publication_date || "Unknown Era";
 
     return (
         <div className="origin-item">
@@ -20,7 +18,7 @@ function StoryRow({ story, onDelete }) {
 
             <div className="origin-header">
                 <h3>{story.title}</h3>
-                <span className="era-badge">{formattedDate}</span>
+                <span className="era-badge">{displayDate}</span>
             </div>
 
             <p>{story.synopsis || "No synopsis available."}</p>

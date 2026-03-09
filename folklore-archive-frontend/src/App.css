@@ -298,12 +298,12 @@
 
 /* ── Synopsis Preamble ────────────────────────── */
 .story-synopsis.preamble p {
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-style: italic;
   color: var(--color-ink-muted);
-  line-height: 1.5;
+  line-height: 1.6;
   text-align: center;
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
 }
 
@@ -313,10 +313,7 @@
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-lg);
   padding: 3rem 4rem;
-  margin: 2rem auto 4rem;
-  max-width: 850px;
   box-shadow: var(--shadow-card);
-  position: relative;
 }
 
 .story-body-display {

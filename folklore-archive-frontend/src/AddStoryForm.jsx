@@ -49,13 +49,15 @@ function AddStoryForm({ onStoryAdded }) {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="publication_date">Publication Date:</label>
-                        <input type="date" id="publication_date" name="publication_date" value={formData.publication_date} onChange={handleChange} />
+                        <label htmlFor="publication_date">Publication Era/Date:</label>
+                        <input type="text" id="publication_date" name="publication_date"
+                               value={formData.publication_date} onChange={handleChange}
+                               placeholder="e.g., c. 2100 BCE, 19th Century" maxLength={100}/>
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="synopsis">Synopsis:</label>
-                        <textarea id="synopsis" name="synopsis" value={formData.synopsis} onChange={handleChange} />
+                        <textarea id="synopsis" name="synopsis" value={formData.synopsis} onChange={handleChange}/>
                     </div>
 
                     <button type="submit">Save to Library</button>
