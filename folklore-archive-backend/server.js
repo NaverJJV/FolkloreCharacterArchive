@@ -378,18 +378,17 @@ app.get('/api/stories/:id/characters', async (req, res) => {
 // POST a new story
 app.post('/api/stories', async (req, res) => {
     try {
-        const { title, synopsis, publication_date } = req.body;
+        const { title, synopsis, content, publication_date } = req.body;
 
         if (!title || title.trim() === "") {
             return res.status(400).json({ message: "Story title is required" });
         }
 
-        // Handle empty dates by inserting null instead of an empty string
         const pubDate = publication_date ? publication_date : null;
 
         const newStory = await pool.query(
-            'INSERT INTO stories (title, synopsis, publication_date) VALUES ($1, $2, $3) RETURNING *',
-            [title.trim(), synopsis, pubDate]
+            'INSERT INTO stories (title, synopsis, content, publication_date) VALUES ($1, $2, $3, $4) RETURNING *',
+            [title.trim(), synopsis, content, pubDate]
         );
 
         res.json(newStory.rows[0]);
@@ -405,14 +404,14 @@ app.put('/api/stories/:id', async (req, res) => {
         const id = parseInt(req.params.id, 10);
         if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
 
-        const { title, synopsis, publication_date } = req.body;
+        const { title, synopsis, content, publication_date } = req.body;
         if (!title || title.trim() === "") return res.status(400).json({ message: "Title is required" });
 
         const pubDate = publication_date ? publication_date : null;
 
         const updateStory = await pool.query(
-            'UPDATE stories SET title = $1, synopsis = $2, publication_date = $3 WHERE id = $4 RETURNING *',
-            [title.trim(), synopsis, pubDate, id]
+            'UPDATE stories SET title = $1, synopsis = $2, content = $3, publication_date = $4 WHERE id = $5 RETURNING *',
+            [title.trim(), synopsis, content, pubDate, id]
         );
 
         if (updateStory.rowCount === 0) return res.status(404).json({ message: "Story not found" });

@@ -67,6 +67,7 @@ const seedDatabase = async () => {
                 id SERIAL PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 synopsis TEXT,
+                content TEXT,
                 publication_date DATE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

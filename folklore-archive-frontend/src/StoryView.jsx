@@ -39,6 +39,7 @@ function StoryView() {
                 setEditStoryData({
                     title: storyData.title,
                     synopsis: storyData.synopsis || '',
+                    content: storyData.content || '',
                     publication_date: storyData.publication_date ? new Date(storyData.publication_date).toISOString().split('T')[0] : ''
                 });
 
@@ -134,59 +135,98 @@ function StoryView() {
                 {/* TITLE EDIT */}
                 {editingField === 'title' ? (
                     <div className="inline-edit-group title-edit">
-                        <input type="text" value={editStoryData.title} onChange={(e) => setEditStoryData({...editStoryData, title: e.target.value})} maxLength={255} autoFocus />
+                        <input type="text" value={editStoryData.title}
+                               onChange={(e) => setEditStoryData({...editStoryData, title: e.target.value})}
+                               maxLength={255} autoFocus/>
                         <button onClick={handleSaveStoryDetail} className="edit-button">Save</button>
                         <button onClick={() => setEditingField(null)} className="toggle-button">Cancel</button>
                     </div>
                 ) : (
                     <h1 className="editable-field">
                         {story.title}
-                        <button className="inline-edit-icon" onClick={() => setEditingField('title')} title="Edit Title">&#x270E;</button>
+                        <button className="inline-edit-icon" onClick={() => setEditingField('title')}
+                                title="Edit Title">&#x270E;</button>
                     </h1>
                 )}
 
                 {/* DATE EDIT */}
                 {editingField === 'date' ? (
                     <div className="inline-edit-group date-edit">
-                        <input type="date" value={editStoryData.publication_date} onChange={(e) => setEditStoryData({...editStoryData, publication_date: e.target.value})} />
+                        <input type="date" value={editStoryData.publication_date} onChange={(e) => setEditStoryData({
+                            ...editStoryData,
+                            publication_date: e.target.value
+                        })}/>
                         <button onClick={handleSaveStoryDetail} className="edit-button">Save</button>
                         <button onClick={() => setEditingField(null)} className="toggle-button">Cancel</button>
                     </div>
                 ) : (
                     <p className="editable-field story-date">
                         PUBLISHED: {formattedDate}
-                        <button className="inline-edit-icon" onClick={() => setEditingField('date')} title="Edit Date">&#x270E;</button>
+                        <button className="inline-edit-icon" onClick={() => setEditingField('date')}
+                                title="Edit Date">&#x270E;</button>
                     </p>
                 )}
 
-                {/* SYNOPSIS EDIT */}
+                {/* SYNOPSIS EDIT (Now smaller and italicized) */}
                 {editingField === 'synopsis' ? (
                     <div className="inline-edit-group synopsis-edit">
-                        <textarea value={editStoryData.synopsis} onChange={(e) => setEditStoryData({...editStoryData, synopsis: e.target.value})} autoFocus />
-                        <div className="edit-actions">
+                        <textarea value={editStoryData.synopsis}
+                                  onChange={(e) => setEditStoryData({...editStoryData, synopsis: e.target.value})}
+                                  autoFocus placeholder="Enter a brief synopsis..."/>
+                        <div className="edit-actions" style={{display: 'flex', gap: '10px'}}>
                             <button onClick={handleSaveStoryDetail} className="edit-button">Save</button>
                             <button onClick={() => setEditingField(null)} className="toggle-button">Cancel</button>
                         </div>
                     </div>
                 ) : (
-                    <div className="editable-field story-synopsis">
-                        <p>{story.synopsis}</p>
-                        <button className="inline-edit-icon" onClick={() => setEditingField('synopsis')} title="Edit Synopsis">&#x270E;</button>
+                    <div className="editable-field story-synopsis preamble">
+                        <p>{story.synopsis || "No synopsis available."}</p>
+                        <button className="inline-edit-icon" onClick={() => setEditingField('synopsis')}
+                                title="Edit Synopsis">&#x270E;</button>
                     </div>
-                )}
-
-                {story.updated_at && (
-                    <p style={{ fontSize: '0.8rem', color: 'var(--color-ink-muted)', fontStyle: 'italic', marginTop: '1rem' }}>
-                        Last modified: {new Date(story.updated_at).toLocaleString()}
-                    </p>
                 )}
             </div>
 
-            <h2 style={{ borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>Cast of Characters</h2>
+            {/* THE MAIN EVENT: STORY CONTENT */}
+            <div className="story-content-container">
+                {editingField === 'content' ? (
+                    <div className="inline-edit-group content-edit">
+                        <textarea
+                            value={editStoryData.content}
+                            onChange={(e) => setEditStoryData({...editStoryData, content: e.target.value})}
+                            autoFocus
+                            placeholder="Pen your tale here..."
+                        />
+                        <div className="edit-actions"
+                             style={{display: 'flex', gap: '10px', marginTop: '1rem', justifyContent: 'flex-end'}}>
+                            <button onClick={() => setEditingField(null)} className="toggle-button">Cancel</button>
+                            <button onClick={handleSaveStoryDetail} className="edit-button">Save Tale</button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="editable-field story-body-display">
+                        <div className="story-text">
+                            {story.content ? (
+                                // This splits the text by line breaks so paragraphs actually render correctly
+                                story.content.split('\n').map((paragraph, index) => (
+                                    <p key={index}>{paragraph}</p>
+                                ))
+                            ) : (
+                                <p className="empty-content">Click the edit icon to begin chronicling this story...</p>
+                            )}
+                        </div>
+                        <button className="inline-edit-icon content-edit-btn" onClick={() => setEditingField('content')}
+                                title="Edit Story Content">&#x270E;</button>
+                    </div>
+                )}
+            </div>
+
+            <h2 style={{borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem'}}>Cast of Characters</h2>
 
             <div className="character-grid">
                 {characters.map(char => (
-                    <StoryCharacterCard key={char.id} char={char} onDetach={handleDetach} onUpdateRole={handleUpdateRole} />
+                    <StoryCharacterCard key={char.id} char={char} onDetach={handleDetach}
+                                        onUpdateRole={handleUpdateRole}/>
                 ))}
 
                 {/* The "Add Character" Card */}
@@ -198,9 +238,10 @@ function StoryView() {
                         </div>
                     </div>
                 ) : (
-                    <div className="character-card edit-mode" style={{ justifyContent: 'center', overflow: 'visible' }}>
-                        <form onSubmit={handleAttachSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                            <h3 style={{ margin: 0, color: 'var(--color-ink)', fontSize: '1.1rem' }}>Attach Character</h3>
+                    <div className="character-card edit-mode" style={{justifyContent: 'center', overflow: 'visible'}}>
+                        <form onSubmit={handleAttachSubmit}
+                              style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                            <h3 style={{margin: 0, color: 'var(--color-ink)', fontSize: '1.1rem'}}>Attach Character</h3>
 
                             {/* CUSTOM SEARCHABLE DROPDOWN */}
                             <div className="custom-dropdown-container">
@@ -251,7 +292,8 @@ function StoryView() {
                                 <button type="button" className="toggle-button" onClick={() => {
                                     setIsAdding(false);
                                     setCharSearchTerm('');
-                                }}>Cancel</button>
+                                }}>Cancel
+                                </button>
                             </div>
                         </form>
                     </div>

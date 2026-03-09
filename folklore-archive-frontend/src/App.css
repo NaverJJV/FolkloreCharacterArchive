@@ -295,3 +295,88 @@
   border: 1px solid var(--color-ember);
   border-radius: var(--radius-sm);
 }
+
+/* ── Synopsis Preamble ────────────────────────── */
+.story-synopsis.preamble p {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: var(--color-ink-muted);
+  line-height: 1.5;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── The Story Reading Pane ───────────────────── */
+.story-content-container {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 3rem 4rem;
+  margin: 2rem auto 4rem;
+  max-width: 850px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+.story-body-display {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.story-text {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: var(--color-ink);
+  text-align: justify;
+}
+
+.story-text p {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.story-text p:last-child {
+  margin-bottom: 0;
+}
+
+.empty-content {
+  text-align: center;
+  font-style: italic;
+  color: var(--color-ink-muted);
+}
+
+.content-edit-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* ── Story Editing Mode ───────────────────────── */
+.content-edit {
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 100%;
+}
+
+.content-edit textarea {
+  width: 100%;
+  min-height: 500px;
+  padding: 1.5rem;
+  border: 1px solid var(--color-ember);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  resize: vertical;
+  background-color: var(--surface-page);
+  color: var(--color-ink);
+}
+
+.content-edit textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(139, 58, 26, 0.12);
+}
