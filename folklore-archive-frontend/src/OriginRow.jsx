@@ -22,12 +22,14 @@ function OriginRow({origin, onUpdate, onDelete}) {
                     value={editData.name}
                     onChange={(e) => setEditData({...editData, name: e.target.value})}
                     placeholder="Origin Name"
+                    maxLength={255}
                 />
                 <input
                     type="text"
                     value={editData.historical_era}
                     onChange={(e) => setEditData({...editData, historical_era: e.target.value})}
                     placeholder="Historical Era"
+                    maxLength={255}
                 />
                 <textarea
                     value={editData.description}

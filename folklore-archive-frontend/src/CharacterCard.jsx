@@ -27,9 +27,9 @@ function CharacterCard({character, onDelete, onEdit}) {
     if (isEditing) {
         return (
             <div className="character-card edit-mode">
-                <input type="text" name="name" value={editData.name} onChange={handleChange}/>
-                <input type="text" name="alias" value={editData.alias} onChange={handleChange}/>
-                <textarea name="core_traits" value={editData.core_traits} onChange={handleChange}/>
+                <input type="text" name="name" value={editData.name} onChange={handleChange} maxLength={255}/>
+                <input type="text" name="alias" value={editData.alias} onChange={handleChange} maxLength={255}/>
+                <textarea name="core_traits" value={editData.core_traits} onChange={handleChange} maxLength={1000}/>
                 <div className="form-group">
                     <label>Origin:</label>
                     <input
@@ -37,6 +37,7 @@ function CharacterCard({character, onDelete, onEdit}) {
                         name="origin_name"
                         value={editData.origin_name}
                         onChange={handleChange}
+                        maxLength={255}
                     />
                 </div>
 
