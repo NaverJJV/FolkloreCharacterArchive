@@ -1,9 +1,41 @@
-.add-character-form {
+.add-character-container {
     background-color: #f0f4f8;
-    padding: 1.5rem;
+    border: 1px solid #d1d9e0;
     border-radius: 8px;
     margin-bottom: 2rem;
-    border: 3px solid #3700ff;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.add-character-container.collapsed {
+    background-color: #e9ecef;
+}
+
+.form-header {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.form-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #0056b3;
+}
+
+.form-header:hover h2 {
+    color: #004494;
+}
+
+.add-character-form {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border: none;
+    background: none;
 }
 
 .add-character-form h2 {
@@ -28,6 +60,14 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1rem;
+}
+
+.form-group textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-height: 80px;
+    font-family: inherit;
 }
 
 button[type="submit"] {
