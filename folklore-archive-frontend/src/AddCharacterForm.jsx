@@ -2,7 +2,6 @@ import {useState} from 'react';
 import './AddCharacterForm.css';
 
 function AddCharacterForm({onCharacterAdded}) {
-    // NEW: State to track visibility
     const [isCollapsed, setIsCollapsed] = useState(true);
 
     const [formData, setFormData] = useState({

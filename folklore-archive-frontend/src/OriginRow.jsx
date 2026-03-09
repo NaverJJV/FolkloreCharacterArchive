@@ -46,7 +46,6 @@ function OriginRow({origin, onUpdate, onDelete}) {
 
     return (
         <div className="origin-item">
-            {/* NEW: The top-right X button */}
             <button
                 className="delete-x-button"
                 title="Delete Origin"

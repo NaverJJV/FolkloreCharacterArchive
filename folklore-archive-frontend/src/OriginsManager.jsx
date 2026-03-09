@@ -109,7 +109,6 @@ function OriginsManager() {
             </div>
 
             <div className="origins-list">
-                {/* 4. Map over filteredOrigins instead of origins */}
                 {filteredOrigins.map(origin => (
                     <OriginRow
                         key={origin.id}
@@ -119,7 +118,6 @@ function OriginsManager() {
                     />
                 ))}
 
-                {/* Optional: Show a message if the search yields no results */}
                 {filteredOrigins.length === 0 && (
                     <p style={{ textAlign: 'center', color: 'var(--color-ink-muted)', fontStyle: 'italic' }}>
                         No origins match your search.
