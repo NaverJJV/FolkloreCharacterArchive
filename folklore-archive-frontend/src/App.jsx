@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+    // State to hold our characters data
+    const [characters, setCharacters] = useState([]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    // useEffect runs automatically when the component loads
+    useEffect(() => {
+        // Fetch data from your backend API
+        fetch('http://localhost:3000/api/characters-detailed')
+            .then(response => response.json())
+            .then(data => {
+                // Update the state with the fetched data
+                setCharacters(data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }, []); // The empty array ensures this only runs once
+
+    // Render the UI
+    return (
+        <div className="App">
+            <h1>Folklore & Character Archive</h1>
+
+            <div className="character-grid">
+                {/* Map through the characters array and create a card for each one */}
+                {characters.map(character => (
+                    <div key={character.id} className="character-card">
+                        <h2>{character.name}</h2>
+                        <h3>"{character.alias}"</h3>
+                        <p><strong>Origin:</strong> {character.origin_name}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }
 
-export default App
+export default App;
