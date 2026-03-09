@@ -24,33 +24,63 @@ const seedDatabase = async () => {
 
         // Create the tables
         console.log('Creating tables...');
+
+        // Create a reusable function for the triggers
+        await pool.query(`
+            CREATE OR REPLACE FUNCTION update_modified_column()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                NEW.updated_at = CURRENT_TIMESTAMP;
+                RETURN NEW;
+            END;
+            $$ language 'plpgsql';
+        `);
         await pool.query(`
             CREATE TABLE origins (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 historical_era VARCHAR(255),
-                description TEXT
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TRIGGER update_origins_modtime 
+            BEFORE UPDATE ON origins FOR EACH ROW 
+            EXECUTE FUNCTION update_modified_column();
 
             CREATE TABLE characters (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 alias VARCHAR(255),
                 core_traits TEXT,
-                origin_id INTEGER REFERENCES origins(id) ON DELETE SET NULL
+                origin_id INTEGER REFERENCES origins(id) ON DELETE SET NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TRIGGER update_characters_modtime 
+            BEFORE UPDATE ON characters FOR EACH ROW 
+            EXECUTE FUNCTION update_modified_column();
 
             CREATE TABLE stories (
                 id SERIAL PRIMARY KEY,
                 title VARCHAR(255) NOT NULL,
                 synopsis TEXT,
-                publication_date DATE
+                publication_date DATE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+
+            CREATE TRIGGER update_stories_modtime 
+            BEFORE UPDATE ON stories FOR EACH ROW 
+            EXECUTE FUNCTION update_modified_column();
 
             CREATE TABLE character_stories (
                 character_id INTEGER REFERENCES characters(id) ON DELETE CASCADE,
                 story_id INTEGER REFERENCES stories(id) ON DELETE CASCADE,
                 role VARCHAR(100),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (character_id, story_id)
             );
         `);

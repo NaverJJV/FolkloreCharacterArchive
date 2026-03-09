@@ -5,6 +5,7 @@ import CharacterCard from './CharacterCard';
 import OriginsManager from './OriginsManager';
 import StoriesManager from './StoriesManager';
 import StoryView from './StoryView';
+import RecentStories from "./RecentStories.jsx";
 import './App.css';
 
 function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) {
@@ -45,6 +46,8 @@ function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) 
             <nav className="origins-nav">
                 <Link to="/origins" className="nav-link">Origins Library</Link>
             </nav>
+
+            <RecentStories />
 
             <AddCharacterForm onCharacterAdded={fetchCharacters} />
 
