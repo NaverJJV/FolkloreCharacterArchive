@@ -29,3 +29,97 @@
 .nav-link:hover {
   text-decoration: underline;
 }
+
+.error-banner {
+  background-color: #ffebee; /* Light red background */
+  color: #c62828;            /* Dark red text */
+  border: 2px solid #ef9a9a;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0 2rem 0;     /* Space above and below */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  animation: fadeIn 0.3s ease-in; /* Smooth entrance */
+}
+
+.error-content {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.close-error {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  color: #c62828;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 1rem;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.close-error:hover {
+  transform: scale(1.2);
+  color: #b71c1c;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.search-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  background: #f1f3f5;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-input {
+  flex: 2;
+  min-width: 250px;
+  padding: 0.6rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.sort-controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+}
+
+.sort-controls label {
+  color: #000;
+}
+
+.sort-controls select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+}
+
+.direction-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.direction-btn:hover {
+  background: #495057;
+}

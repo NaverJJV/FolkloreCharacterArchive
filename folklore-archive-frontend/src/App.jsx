@@ -5,16 +5,73 @@ import CharacterCard from './CharacterCard';
 import OriginsManager from './OriginsManager'; // Import the new page
 import './App.css';
 
-// We move the main archive logic into its own component to keep App.jsx clean
 function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) {
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortOption, setSortOption] = useState('name');
+    const [sortDirection, setSortDirection] = useState('asc');
+
+    // Filter the characters based on the search term
+    const filteredCharacters = characters.filter(char => {
+        const searchLower = searchTerm.toLowerCase();
+        return (
+            char.name.toLowerCase().includes(searchLower) ||
+            (char.alias && char.alias.toLowerCase().includes(searchLower))
+        );
+    });
+
+    // Sort the filtered characters
+    const sortedCharacters = [...filteredCharacters].sort((a, b) => {
+        let valA = (a[sortOption] || '').toString().toLowerCase();
+        let valB = (b[sortOption] || '').toString().toLowerCase();
+
+        // Use origin_name instead of 'origin' for sorting consistency
+        if (sortOption === 'origin') {
+            valA = a.origin_name.toLowerCase();
+            valB = b.origin_name.toLowerCase();
+        }
+
+        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+        return 0;
+    });
+
     return (
         <>
             <nav className="main-nav">
                 <Link to="/origins" className="nav-link">Manage Origins Library</Link>
             </nav>
+
             <AddCharacterForm onCharacterAdded={fetchCharacters} />
+
+            {/* --- Search & Sort Bar --- */}
+            <div className="search-filter-bar">
+                <input
+                    type="text"
+                    placeholder="Search by name or alias..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                />
+
+                <div className="sort-controls">
+                    <label>Sort By:</label>
+                    <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                        <option value="name">Name</option>
+                        <option value="alias">Alias</option>
+                        <option value="origin">Origin</option>
+                    </select>
+
+                    <button
+                        className="direction-btn"
+                        onClick={() => setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')}
+                    >
+                        {sortDirection === 'asc' ? 'A-Z ↓' : 'Z-A ↑'}
+                    </button>
+                </div>
+            </div>
+
             <div className="character-grid">
-                {characters.map(character => (
+                {sortedCharacters.map(character => (
                     <CharacterCard
                         key={character.id}
                         character={character}
