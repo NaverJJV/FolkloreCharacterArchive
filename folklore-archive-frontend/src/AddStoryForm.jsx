@@ -57,7 +57,7 @@ function AddStoryForm({ onStoryAdded }) {
 
                     <div className="form-group">
                         <label htmlFor="synopsis">Synopsis:</label>
-                        <textarea id="synopsis" name="synopsis" value={formData.synopsis} onChange={handleChange}/>
+                        <textarea id="synopsis" name="synopsis" value={formData.synopsis} onChange={handleChange} maxLength={1000}/>
                     </div>
 
                     <button type="submit">Save to Library</button>

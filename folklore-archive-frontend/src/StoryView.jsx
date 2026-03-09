@@ -144,7 +144,7 @@ function StoryView() {
                 {/* SYNOPSIS */}
                 {editingField === 'synopsis' ? (
                     <div className="inline-edit-group synopsis-edit">
-                        <textarea value={editStoryData.synopsis} onChange={(e) => setEditStoryData({...editStoryData, synopsis: e.target.value})} autoFocus placeholder="Enter a brief synopsis..." />
+                        <textarea value={editStoryData.synopsis} onChange={(e) => setEditStoryData({...editStoryData, synopsis: e.target.value})} autoFocus placeholder="Enter a brief synopsis..." maxLength={1000}/>
                         <div className="edit-actions" style={{ display: 'flex', gap: '10px' }}>
                             <button onClick={handleSaveStoryDetail} className="edit-button">Save</button>
                             <button onClick={() => setEditingField(null)} className="toggle-button">Cancel</button>
