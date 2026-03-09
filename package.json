@@ -1,0 +1,26 @@
+{
+  "name": "folklorecharacterarchive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "scripts": {
+    "start:backend": "npm run dev --prefix folklore-archive-backend",
+    "start:frontend": "npm run dev --prefix folklore-archive-frontend",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NaverJJV/FolkloreCharacterArchive.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NaverJJV/FolkloreCharacterArchive/issues"
+  },
+  "homepage": "https://github.com/NaverJJV/FolkloreCharacterArchive#readme"
+}
