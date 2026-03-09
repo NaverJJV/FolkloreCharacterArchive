@@ -30,24 +30,6 @@ function StoriesManager() {
         }
     };
 
-    const handleUpdateStory = async (id, updatedData) => {
-        setError(null);
-        try {
-            const response = await fetch(`http://localhost:3000/api/stories/${id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedData),
-            });
-            if (response.ok) fetchStories();
-            else {
-                const data = await response.json();
-                setError(data.message || "Failed to update story.");
-            }
-        } catch (err) {
-            setError("A network error occurred while saving.");
-        }
-    };
-
     const filteredStories = stories.filter(story => {
         const searchLower = searchTerm.toLowerCase();
         const titleMatch = (story.title || '').toLowerCase().includes(searchLower);
@@ -88,7 +70,6 @@ function StoriesManager() {
                     <StoryRow
                         key={story.id}
                         story={story}
-                        onUpdate={handleUpdateStory}
                         onDelete={handleDeleteStory}
                     />
                 ))}

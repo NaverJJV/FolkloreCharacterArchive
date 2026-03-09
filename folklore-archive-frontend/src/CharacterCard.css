@@ -193,3 +193,100 @@
     display: block;
     margin-bottom: 0.3rem;
 }
+
+/* ── Add Card Placeholder ─────────────────────── */
+.add-card {
+    border: 2px dashed var(--border-medium);
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    box-shadow: none;
+}
+
+.add-card::before {
+    display: none; /* Removes the top gradient accent */
+}
+
+.add-card:hover {
+    border-color: var(--color-ember);
+    background-color: var(--surface-form);
+    transform: translateY(-3px);
+}
+
+.add-card-content {
+    text-align: center;
+    color: var(--color-ink-muted);
+    transition: color var(--transition-fast);
+}
+
+.add-card-content .plus-icon {
+    font-size: 3rem;
+    line-height: 1;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-gold);
+    transition: color var(--transition-fast);
+}
+
+.add-card:hover .add-card-content h3,
+.add-card:hover .add-card-content .plus-icon {
+    color: var(--color-ember);
+}
+
+/* ── Custom Searchable Dropdown ────────────────────── */
+.custom-dropdown-container {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-input {
+    width: 100%;
+    padding: 0.5rem 0.7rem;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+}
+
+.dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-medium);
+    border-top: none;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: var(--shadow-card);
+    text-align: left;
+}
+
+.dropdown-item {
+    padding: 0.5rem 0.7rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color var(--transition-fast);
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background-color: var(--color-parchment-dark);
+    color: var(--color-ember);
+}
+
+.dropdown-item.empty {
+    cursor: default;
+    color: var(--color-ink-muted);
+    font-style: italic;
+}

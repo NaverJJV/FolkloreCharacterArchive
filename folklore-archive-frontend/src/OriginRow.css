@@ -167,7 +167,7 @@
 }
 
 .view-button {
-    flex: 7; /* Takes up 70% of the space */
+    flex: 8; /* Takes up 70% of the space */
     background-color: var(--color-gold);
     color: #fff;
     text-align: center;
@@ -192,6 +192,6 @@
 }
 
 .origin-item .card-actions .split-edit {
-    flex: 3; /* Takes up 30% of the space */
+    flex: 1; /* Takes up 30% of the space */
     width: auto;
 }

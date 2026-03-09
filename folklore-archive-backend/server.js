@@ -433,3 +433,58 @@ app.delete('/api/stories/:id', async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 });
+
+// POST: Link a character to a story
+app.post('/api/character_stories', async (req, res) => {
+    try {
+        const { character_id, story_id, role } = req.body;
+
+        const newLink = await pool.query(
+            'INSERT INTO character_stories (character_id, story_id, role) VALUES ($1, $2, $3) RETURNING *',
+            [character_id, story_id, role]
+        );
+        res.json(newLink.rows[0]);
+    } catch (err) {
+        // 23505 is the PostgreSQL error code for a unique constraint violation
+        if (err.code === '23505') {
+            return res.status(400).json({ message: "Character is already attached to this story." });
+        }
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// PUT: Update a character's role in a specific story
+app.put('/api/character_stories', async (req, res) => {
+    try {
+        const { character_id, story_id, role } = req.body;
+
+        if (role && role.length > 100) {
+            return res.status(400).json({ message: "Role must be under 100 characters." });
+        }
+
+        const updateLink = await pool.query(
+            'UPDATE character_stories SET role = $1 WHERE character_id = $2 AND story_id = $3 RETURNING *',
+            [role, character_id, story_id]
+        );
+        res.json(updateLink.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// DELETE: Detach a character from a story
+app.delete('/api/stories/:storyId/characters/:characterId', async (req, res) => {
+    try {
+        const { storyId, characterId } = req.params;
+        await pool.query(
+            'DELETE FROM character_stories WHERE story_id = $1 AND character_id = $2',
+            [storyId, characterId]
+        );
+        res.json({ message: "Character removed from story." });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
