@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './OriginRow.css'; // Reusing the identical CSS classes
 
 function StoryRow({ story, onUpdate, onDelete }) {
@@ -54,8 +55,13 @@ function StoryRow({ story, onUpdate, onDelete }) {
             </div>
             <p>{story.synopsis || "No synopsis available."}</p>
 
-            <div className="card-actions">
-                <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Details</button>
+            <div className="card-actions split-actions">
+                <Link to={`/stories/${story.id}`} className="view-button">
+                    View Story
+                </Link>
+                <button className="edit-button split-edit" onClick={() => setIsEditing(true)}>
+                    Edit
+                </button>
             </div>
         </div>
     );

@@ -158,3 +158,40 @@
 .origin-item .card-actions .edit-button {
     width: 100%;
 }
+
+/* ── Split Actions (70/30) ────────────────────── */
+.split-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.view-button {
+    flex: 7; /* Takes up 70% of the space */
+    background-color: var(--color-gold);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-button);
+    font-family: var(--font-display);
+    font-weight: 600;
+    transition: background-color var(--transition-smooth), color var(--transition-smooth);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-button:hover {
+    background-color: var(--color-gold-light);
+    color: var(--color-ink);
+}
+
+.origin-item .card-actions .split-edit {
+    flex: 3; /* Takes up 30% of the space */
+    width: auto;
+}

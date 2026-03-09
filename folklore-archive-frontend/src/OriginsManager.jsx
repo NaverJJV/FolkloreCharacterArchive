@@ -96,7 +96,6 @@ function OriginsManager() {
 
             <AddOriginForm onOriginAdded={fetchOrigins} />
 
-            {/* 3. The Search Bar */}
             <div className="search-filter-bar" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <input
                     type="text"

@@ -4,6 +4,7 @@ import AddCharacterForm from './AddCharacterForm';
 import CharacterCard from './CharacterCard';
 import OriginsManager from './OriginsManager';
 import StoriesManager from './StoriesManager';
+import StoryView from './StoryView';
 import './App.css';
 
 function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) {
@@ -155,6 +156,7 @@ function App() {
                     } />
                     <Route path="/origins" element={<OriginsManager />} />
                     <Route path="/stories" element={<StoriesManager />} />
+                    <Route path="stories/:id" element= {<StoryView />} />
                 </Routes>
             </div>
         </Router>

@@ -318,6 +318,47 @@ app.get('/api/stories', async (req, res) => {
     }
 });
 
+// GET a single story by ID
+app.get('/api/stories/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const story = await pool.query('SELECT * FROM stories WHERE id = $1', [id]);
+
+        if (story.rows.length === 0) {
+            return res.status(404).json({ message: "Story not found" });
+        }
+        res.json(story.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// GET characters linked to a specific story
+app.get('/api/stories/:id/characters', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const query = `
+            SELECT 
+                c.id, 
+                c.name, 
+                c.alias, 
+                cs.role, 
+                o.name AS origin_name
+            FROM characters c
+            JOIN character_stories cs ON c.id = cs.character_id
+            LEFT JOIN origins o ON c.origin_id = o.id
+            WHERE cs.story_id = $1
+            ORDER BY c.name ASC;
+        `;
+        const characters = await pool.query(query, [id]);
+        res.json(characters.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 // POST a new story
 app.post('/api/stories', async (req, res) => {
     try {
