@@ -96,8 +96,44 @@ function App() {
 
     useEffect(() => { fetchCharacters(); }, []);
 
-    const handleDelete = async (id) => { /* Same as before */ };
-    const handleEdit = async (id, data) => { /* Same as before */ };
+    const handleDelete = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this character?")) return;
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/characters/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                fetchCharacters();
+            } else {
+                console.error('Failed to delete character');
+            }
+        } catch (error) {
+            console.error('Error deleting character:', error);
+        }
+    };
+
+    const handleEdit = async (id, updatedData) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/characters/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            });
+
+            if (response.ok) {
+                // Re-fetch the list to show the updated data
+                fetchCharacters();
+            } else {
+                console.error('Failed to update character');
+            }
+        } catch (error) {
+            console.error('Error updating character:', error);
+        }
+    };
 
     return (
         <Router>
