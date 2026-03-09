@@ -84,27 +84,29 @@ app.post('/api/characters', async (req, res) => {
     try {
         const { name, alias, core_traits, origin_name } = req.body;
 
-        // Backend Validation
         if (!origin_name || origin_name.trim() === "") {
             return res.status(400).json({ message: "Origin name is required" });
         }
 
-        // Check if origin exists
-        let originResult = await pool.query('SELECT id FROM origins WHERE name = $1', [origin_name.trim()]);
+        const trimmedOrigin = origin_name.trim();
+
+        // Use ILIKE or LOWER() for case-insensitive lookup
+        let originResult = await pool.query(
+            'SELECT id FROM origins WHERE LOWER(name) = LOWER($1)',
+            [trimmedOrigin]
+        );
 
         let originId;
         if (originResult.rows.length > 0) {
             originId = originResult.rows[0].id;
         } else {
-            // Create it if it doesn't
             const newOrigin = await pool.query(
                 'INSERT INTO origins (name) VALUES ($1) RETURNING id',
-                [origin_name.trim()]
+                [trimmedOrigin]
             );
             originId = newOrigin.rows[0].id;
         }
 
-        // Create the character
         const newCharacter = await pool.query(
             'INSERT INTO characters (name, alias, core_traits, origin_id) VALUES ($1, $2, $3, $4) RETURNING *',
             [name, alias, core_traits, originId]
@@ -112,7 +114,6 @@ app.post('/api/characters', async (req, res) => {
 
         res.json(newCharacter.rows[0]);
     } catch (err) {
-        console.error("DATABASE ERROR:", err.message);
         res.status(500).json({ error: err.message });
     }
 });
@@ -213,5 +214,33 @@ app.put('/api/origins/:id', async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
+    }
+});
+
+// DELETE an origin
+app.delete('/api/origins/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Fetch up to 3 character names linked to this origin
+        const characterCheck = await pool.query(
+            'SELECT name FROM characters WHERE origin_id = $1 LIMIT 3',
+            [id]
+        );
+
+        if (characterCheck.rows.length > 0) {
+            const names = characterCheck.rows.map(c => c.name).join(', ');
+            const count = characterCheck.rows.length;
+
+            return res.status(400).json({
+                message: `Cannot delete this origin. It is still assigned to ${names}${count === 3 ? ' and others' : ''}.`
+            });
+        }
+
+        await pool.query('DELETE FROM origins WHERE id = $1', [id]);
+        res.json({ message: "Origin deleted successfully" });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server Error' });
     }
 });

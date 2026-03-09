@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import './OriginRow.css';
 
-function OriginRow({ origin, onUpdate }) {
+function OriginRow({origin, onUpdate, onDelete}) {
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setEditData] = useState({
         name: origin.name,
@@ -49,7 +49,20 @@ function OriginRow({ origin, onUpdate }) {
                 <span className="era-badge">{origin.historical_era || "Unknown Era"}</span>
             </div>
             <p>{origin.description || "No description provided."}</p>
-            <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Details</button>
+
+            <div className="card-actions">
+                <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Details</button>
+                <button
+                    className="delete-button"
+                    onClick={() => {
+                        if (window.confirm(`Are you sure you want to delete ${origin.name}?`)) {
+                            onDelete(origin.id); // This was crashing because onDelete was undefined
+                        }
+                    }}
+                >
+                    Delete
+                </button>
+            </div>
         </div>
     );
 }
