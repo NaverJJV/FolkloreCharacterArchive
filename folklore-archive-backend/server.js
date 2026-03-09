@@ -318,6 +318,19 @@ app.get('/api/stories', async (req, res) => {
     }
 });
 
+// GET the 3 most recently added stories for the dashboard
+app.get('/api/stories/recent', async (req, res) => {
+    try {
+        const recentStories = await pool.query(
+            'SELECT * FROM stories ORDER BY created_at DESC LIMIT 3'
+        );
+        res.json(recentStories.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 // GET a single story by ID
 app.get('/api/stories/:id', async (req, res) => {
     try {
@@ -334,18 +347,6 @@ app.get('/api/stories/:id', async (req, res) => {
     }
 });
 
-// GET the 3 most recently added stories for the dashboard
-app.get('/api/stories/recent', async (req, res) => {
-    try {
-        const recentStories = await pool.query(
-            'SELECT * FROM stories ORDER BY created_at DESC LIMIT 3'
-        );
-        res.json(recentStories.rows);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
-    }
-});
 
 // GET characters linked to a specific story
 app.get('/api/stories/:id/characters', async (req, res) => {
