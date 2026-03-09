@@ -182,3 +182,14 @@ app.put('/api/characters/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+// GET all origins
+app.get('/api/origins', async (req, res) => {
+    try {
+        const allOrigins = await pool.query('SELECT * FROM origins ORDER BY name ASC');
+        res.json(allOrigins.rows);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});

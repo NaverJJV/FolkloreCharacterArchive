@@ -1,0 +1,21 @@
+.origins-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+.origin-item {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+}
+
+.origin-item h3 {
+    color: #000;
+}
+
+.origin-item p {
+    color: #000;
+}

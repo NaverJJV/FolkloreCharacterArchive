@@ -12,3 +12,20 @@
   margin-top: 2rem;
   text-align: center;
 }
+
+.main-nav {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #004494;
+  border-radius: 8px;
+}
+
+.nav-link, .back-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
