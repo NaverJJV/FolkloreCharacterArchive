@@ -1,13 +1,16 @@
 const express = require('express');
 const {Pool} = require('pg');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 // Initialize the Express application
 const app = express();
 
 // Enable CORS for incoming requests
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173' // If using a custom URL, change here
+}));
 
 // Middleware to parse incoming JSON data
 app.use(express.json());
@@ -17,6 +20,14 @@ app.use((req, res, next) => {
     }
     next();
 });
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100,
+    message: { message: 'Too many requests, please try again later.' }
+});
+
+app.use('/api/', limiter);
 
 // Set up the PostgreSQL connection pool using individual env variables
 const pool = new Pool({
