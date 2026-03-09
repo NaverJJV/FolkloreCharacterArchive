@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './OriginRow.css';
 
 function OriginRow({ origin, onUpdate }) {
     const [isEditing, setIsEditing] = useState(false);

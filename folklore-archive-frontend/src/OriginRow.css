@@ -1,0 +1,50 @@
+.origin-item {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: white;
+}
+
+.origin-item h3 {
+    color: #000;
+}
+
+.origin-item p {
+    color: #000;
+}
+
+.origin-item .card-actions {
+    margin-top: 1rem;
+}
+
+.origin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0.5rem;
+}
+
+.era-badge {
+    background: #e9ecef;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #495057;
+    font-weight: bold;
+}
+
+.origin-item.edit-mode input {
+    width: 90%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+.origin-item.edit-mode textarea {
+    width: 90%;
+    min-height: 80px;
+    margin-top: 10px;
+}
