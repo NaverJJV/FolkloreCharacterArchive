@@ -10,7 +10,7 @@ function CharacterCard({character, onDelete, onEdit}) {
         name: character.name,
         alias: character.alias,
         core_traits: character.core_traits || '',
-        origin_id: character.origin_name || ''
+        origin_name: character.origin_name || ''
     });
 
     const handleChange = (e) => {
