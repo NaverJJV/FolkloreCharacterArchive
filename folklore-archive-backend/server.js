@@ -8,10 +8,15 @@ const app = express();
 
 // Enable CORS for incoming requests
 app.use(cors());
-app.use(express.json());
 
 // Middleware to parse incoming JSON data
 app.use(express.json());
+app.use((req, res, next) => {
+    if (['POST', 'PUT'].includes(req.method) && !req.is('application/json')) {
+        return res.status(415).json({ message: 'Content-Type must be application/json' });
+    }
+    next();
+});
 
 // Set up the PostgreSQL connection pool using individual env variables
 const pool = new Pool({
@@ -42,6 +47,16 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// Enforce varchar character limit
+function validateCharacterInput({ name, alias, core_traits, origin_name }) {
+    if (!name || name.trim().length === 0) return 'Name is required';
+    if (name.length > 255) return 'Name must be under 255 characters';
+    if (alias && alias.length > 255) return 'Alias must be under 255 characters';
+    if (origin_name && origin_name.length > 255) return 'Origin name must be under 255 characters';
+    if (core_traits && core_traits.length > 1000) return 'Core traits must be under 1000 characters';
+    return null;
+}
 
 // GET all characters
 app.get('/api/characters', async (req, res) => {
@@ -84,6 +99,9 @@ app.post('/api/characters', async (req, res) => {
     try {
         const { name, alias, core_traits, origin_name } = req.body;
 
+        const error = validateCharacterInput(req.body);
+        if (error) return res.status(400).json({ message: error });
+
         if (!origin_name || origin_name.trim() === "") {
             return res.status(400).json({ message: "Origin name is required" });
         }
@@ -122,7 +140,8 @@ app.post('/api/characters', async (req, res) => {
 app.delete('/api/characters/:id', async (req, res) => {
     try {
         // Grab the ID from the URL parameters
-        const {id} = req.params;
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
 
         // Execute the DELETE SQL query
         const deleteQuery = await pool.query(
@@ -146,8 +165,12 @@ app.delete('/api/characters/:id', async (req, res) => {
 // PUT (update) an existing character
 app.put('/api/characters/:id', async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
         const { name, alias, core_traits, origin_name } = req.body;
+
+        const error = validateCharacterInput(req.body);
+        if (error) return res.status(400).json({ message: error });
 
         if (!origin_name || origin_name.trim() === "") {
             return res.status(400).json({ message: "Origin name is required" });
@@ -198,8 +221,12 @@ app.get('/api/origins', async (req, res) => {
 // UPDATE an existing origin
 app.put('/api/origins/:id', async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
         const { name, historical_era, description } = req.body;
+
+        const error = validateCharacterInput(req.body);
+        if (error) return res.status(400).json({ message: error });
 
         const updateOrigin = await pool.query(
             'UPDATE origins SET name = $1, historical_era = $2, description = $3 WHERE id = $4 RETURNING *',
@@ -220,7 +247,8 @@ app.put('/api/origins/:id', async (req, res) => {
 // DELETE an origin
 app.delete('/api/origins/:id', async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.params.id, 10);
+        if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
 
         // Fetch up to 3 character names linked to this origin
         const characterCheck = await pool.query(
