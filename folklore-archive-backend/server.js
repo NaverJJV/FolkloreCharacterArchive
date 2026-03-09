@@ -193,3 +193,25 @@ app.get('/api/origins', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+// UPDATE an existing origin
+app.put('/api/origins/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, historical_era, description } = req.body;
+
+        const updateOrigin = await pool.query(
+            'UPDATE origins SET name = $1, historical_era = $2, description = $3 WHERE id = $4 RETURNING *',
+            [name, historical_era, description, id]
+        );
+
+        if (updateOrigin.rowCount === 0) {
+            return res.status(404).json({ message: "Origin not found" });
+        }
+
+        res.json(updateOrigin.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});

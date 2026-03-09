@@ -19,3 +19,36 @@
 .origin-item p {
     color: #000;
 }
+
+.origin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0.5rem;
+}
+
+.era-badge {
+    background: #e9ecef;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: #495057;
+    font-weight: bold;
+}
+
+.origins-manager .edit-button {
+    margin-top: 1rem;
+    max-width: 150px;
+}
+
+.origins-manager .toggle-button {
+    margin-top: 1rem;
+    max-width: 150px;
+}
+
+.origin-item.edit-mode textarea {
+    width: 100%;
+    min-height: 80px;
+    margin-top: 10px;
+}
