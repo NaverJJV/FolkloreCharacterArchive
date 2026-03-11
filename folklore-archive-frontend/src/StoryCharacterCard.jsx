@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './CharacterCard.css';
 import './OriginRow.css'; // Reusing the top-right X button style
-import { Link } from 'react-router-dom';
 
 function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
     const [isEditingRole, setIsEditingRole] = useState(false);
@@ -10,6 +9,11 @@ function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
     const handleSaveRole = () => {
         onUpdateRole(char.id, roleInput);
         setIsEditingRole(false);
+    };
+
+    const handleCancel = () => {
+        setRoleInput(char.role || ''); // Reset input to original value
+        setIsEditingRole(false);       // Close edit mode
     };
 
     return (
@@ -26,15 +30,10 @@ function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
                 &times;
             </button>
 
-            <h2>
-                <Link to={`/characters/${char.id}`} className="character-link">
-                    {char.name}
-                </Link>
-            </h2>
+            <h2>{char.name}</h2>
             <h3>"{char.alias}"</h3>
 
-            <div className="character-details"
-                 style={{display: 'block', borderTop: 'none', marginTop: '0.5rem', paddingTop: '0' }}>
+            <div className="character-details" style={{ display: 'block', borderTop: 'none', marginTop: '0.5rem', paddingTop: '0' }}>
                 <p><strong>Era:</strong> {char.origin_name}</p>
 
                 <div style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: 'var(--surface-form)', borderRadius: 'var(--radius-sm)' }}>
@@ -49,7 +48,10 @@ function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
                                 maxLength={100}
                                 style={{ flex: 1, padding: '0.3rem', fontSize: '0.9rem', border: '1px solid var(--border-medium)', borderRadius: 'var(--radius-sm)' }}
                             />
-                            <button onClick={handleSaveRole} className="edit-button" style={{ padding: '0.3rem 0.6rem', flex: 'none' }}>Save</button>
+                            <div style={{ display: 'flex', gap: '5px' }}>
+                                <button onClick={handleSaveRole} className="edit-button" >Save</button>
+                                <button onClick={handleCancel} className="toggle-button" >Cancel</button>
+                            </div>
                         </div>
                     ) : (
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '5px' }}>
@@ -64,6 +66,12 @@ function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
                         </div>
                     )}
                 </div>
+
+                {char.updated_at && (
+                    <div className="last-edited-timestamp">
+                        Last edited: {new Date(char.updated_at).toLocaleString()}
+                    </div>
+                )}
             </div>
         </div>
     );
