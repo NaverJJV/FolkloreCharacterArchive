@@ -60,12 +60,12 @@ app.listen(PORT, () => {
 });
 
 // Enforce varchar character limit
-function validateCharacterInput({ name, alias, core_traits, origin_name }) {
+function validateCharacterInput({ name, alias, description, origin_name }) {
     if (!name || name.trim().length === 0) return 'Name is required';
     if (name.length > 255) return 'Name must be under 255 characters';
     if (alias && alias.length > 255) return 'Alias must be under 255 characters';
     if (origin_name && origin_name.length > 255) return 'Origin name must be under 255 characters';
-    if (core_traits && core_traits.length > 1000) return 'Core traits must be under 1000 characters';
+    if (description && description.length > 1000) return 'Description must be under 1000 characters';
     return null;
 }
 
@@ -92,11 +92,12 @@ app.get('/api/characters-detailed', async (req, res) => {
                 characters.id, 
                 characters.name, 
                 characters.alias, 
-                characters.core_traits, 
+                characters.description,
                 characters.updated_at, 
                 origins.name AS origin_name 
             FROM characters 
-            LEFT JOIN origins ON characters.origin_id = origins.id;
+            LEFT JOIN origins ON characters.origin_id = origins.id
+            ORDER BY characters.name ASC;
         `;
         const detailedCharacters = await pool.query(query);
         res.json(detailedCharacters.rows);
@@ -109,7 +110,7 @@ app.get('/api/characters-detailed', async (req, res) => {
 // POST a new character
 app.post('/api/characters', async (req, res) => {
     try {
-        const { name, alias, core_traits, origin_name } = req.body;
+        const { name, alias, description, origin_name } = req.body;
 
         const error = validateCharacterInput(req.body);
         if (error) return res.status(400).json({ message: error });
@@ -138,8 +139,8 @@ app.post('/api/characters', async (req, res) => {
         }
 
         const newCharacter = await pool.query(
-            'INSERT INTO characters (name, alias, core_traits, origin_id) VALUES ($1, $2, $3, $4) RETURNING *',
-            [name, alias, core_traits, originId]
+            'INSERT INTO characters (name, alias, description, origin_id) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, alias, description, originId]
         );
 
         res.json(newCharacter.rows[0]);
@@ -179,7 +180,7 @@ app.put('/api/characters/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
         if (isNaN(id)) return res.status(400).json({ message: 'Invalid ID' });
-        const { name, alias, core_traits, origin_name } = req.body;
+        const { name, alias, description, origin_name } = req.body;
 
         const error = validateCharacterInput(req.body);
         if (error) return res.status(400).json({ message: error });
@@ -204,8 +205,8 @@ app.put('/api/characters/:id', async (req, res) => {
 
         // Update the character with the (potentially new) originId
         const updateQuery = await pool.query(
-            'UPDATE characters SET name = $1, alias = $2, core_traits = $3, origin_id = $4 WHERE id = $5 RETURNING *',
-            [name, alias, core_traits, originId, id]
+            'UPDATE characters SET name = $1, alias = $2, description = $3, origin_id = $4 WHERE id = $5 RETURNING *',
+            [name, alias, description, originId, id]
         );
 
         if (updateQuery.rowCount === 0) {
@@ -342,6 +343,47 @@ app.get('/api/stories/:id', async (req, res) => {
             return res.status(404).json({ message: "Story not found" });
         }
         res.json(story.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// GET a single character by ID
+app.get('/api/characters/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const query = `
+            SELECT c.*, o.name AS origin_name 
+            FROM characters c 
+            LEFT JOIN origins o ON c.origin_id = o.id 
+            WHERE c.id = $1
+        `;
+        const character = await pool.query(query, [id]);
+
+        if (character.rows.length === 0) {
+            return res.status(404).json({ message: "Character not found" });
+        }
+        res.json(character.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// GET all stories a specific character appears in
+app.get('/api/characters/:id/stories', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const query = `
+            SELECT s.id, s.title, s.publication_date, cs.role, s.updated_at 
+            FROM stories s 
+            JOIN character_stories cs ON s.id = cs.story_id 
+            WHERE cs.character_id = $1 
+            ORDER BY s.title ASC
+        `;
+        const stories = await pool.query(query, [id]);
+        res.json(stories.rows);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');

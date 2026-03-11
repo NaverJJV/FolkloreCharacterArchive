@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './CharacterCard.css';
 import './OriginRow.css'; // Reusing the top-right X button style
+import { Link } from 'react-router-dom';
 
 function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
     const [isEditingRole, setIsEditingRole] = useState(false);
@@ -25,10 +26,15 @@ function StoryCharacterCard({ char, onDetach, onUpdateRole }) {
                 &times;
             </button>
 
-            <h2>{char.name}</h2>
+            <h2>
+                <Link to={`/characters/${char.id}`} className="character-link">
+                    {char.name}
+                </Link>
+            </h2>
             <h3>"{char.alias}"</h3>
 
-            <div className="character-details" style={{ display: 'block', borderTop: 'none', marginTop: '0.5rem', paddingTop: '0' }}>
+            <div className="character-details"
+                 style={{display: 'block', borderTop: 'none', marginTop: '0.5rem', paddingTop: '0' }}>
                 <p><strong>Era:</strong> {char.origin_name}</p>
 
                 <div style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: 'var(--surface-form)', borderRadius: 'var(--radius-sm)' }}>

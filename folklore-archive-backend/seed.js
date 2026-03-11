@@ -51,7 +51,7 @@ const seedDatabase = async () => {
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 alias VARCHAR(255),
-                core_traits TEXT,
+                description TEXT,
                 origin_id INTEGER REFERENCES origins(id) ON DELETE SET NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -98,7 +98,7 @@ const seedDatabase = async () => {
 
         // Insert Characters
         await pool.query(`
-            INSERT INTO characters (name, alias, core_traits, origin_id) VALUES
+            INSERT INTO characters (name, alias, description, origin_id) VALUES
             ('Arthur Pendragon', 'King Arthur', 'Chivalrous, burdened by destiny, noble leader', 1),
             ('Sir Galahad', 'The Pure Knight', 'Flawless, devout, spiritually enlightened', 1),
             ('Sir Percival', 'The Innocent Fool', 'Naive but pure-hearted, determined seeker', 1),

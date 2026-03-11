@@ -6,6 +6,7 @@ import OriginsManager from './OriginsManager';
 import StoriesManager from './StoriesManager';
 import StoryView from './StoryView';
 import RecentStories from "./RecentStories.jsx";
+import CharacterView from "./CharacterView.jsx";
 import './App.css';
 
 function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) {
@@ -44,7 +45,7 @@ function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) 
                 <Link to="/stories" className="nav-link">Story Library</Link>
             </nav>
             <nav className="origins-nav">
-                <Link to="/origins" className="nav-link">Manage Eras Library</Link>
+                <Link to="/origins" className="nav-link">Eras Library</Link>
             </nav>
 
             <RecentStories />
@@ -157,9 +158,11 @@ function App() {
                             handleEdit={handleEdit}
                         />
                     } />
+                    <Route path="/" element={<ArchiveHome characters={characters} fetchCharacters={fetchCharacters} handleDelete={handleDelete} handleEdit={handleEdit} />} />
                     <Route path="/origins" element={<OriginsManager />} />
                     <Route path="/stories" element={<StoriesManager />} />
-                    <Route path="stories/:id" element= {<StoryView />} />
+                    <Route path="/stories/:id" element= {<StoryView />} />
+                    <Route path="/characters/:id" element={<CharacterView />} />
                 </Routes>
             </div>
         </Router>

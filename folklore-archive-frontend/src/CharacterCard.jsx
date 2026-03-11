@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import { Link } from 'react-router-dom';
 import './CharacterCard.css';
 
 function CharacterCard({character, onDelete, onEdit}) {
@@ -9,7 +10,7 @@ function CharacterCard({character, onDelete, onEdit}) {
     const [editData, setEditData] = useState({
         name: character.name,
         alias: character.alias,
-        core_traits: character.core_traits || '',
+        description: character.description || '',
         origin_name: character.origin_name || '',
         updated_at: character.updated_at
     });
@@ -30,7 +31,7 @@ function CharacterCard({character, onDelete, onEdit}) {
             <div className="character-card edit-mode">
                 <input type="text" name="name" value={editData.name} onChange={handleChange} maxLength={255}/>
                 <input type="text" name="alias" value={editData.alias} onChange={handleChange} maxLength={255}/>
-                <textarea name="core_traits" value={editData.core_traits} onChange={handleChange} maxLength={1000}/>
+                <textarea name="description" value={editData.description} onChange={handleChange} maxLength={1000}/>
                 <div className="form-group">
                     <label>Origin:</label>
                     <input
@@ -53,19 +54,17 @@ function CharacterCard({character, onDelete, onEdit}) {
     // Otherwise, render the standard display
     return (
         <div className="character-card">
-            <h2>{character.name}</h2>
+            <h2>
+                <Link to={`/characters/${character.id}`} className="character-link">
+                    {character.name}
+                </Link>
+            </h2>
             <h3>"{character.alias}"</h3>
 
             {isExpanded && (
                 <div className="character-details">
                     <p><strong>Era:</strong> {character.origin_name}</p>
-                    <p><strong>Core Traits:</strong> {character.core_traits}</p>
-                </div>
-            )}
-
-            {character.updated_at && (
-                <div className="last-edited-timestamp">
-                    Last edited: {new Date(character.updated_at).toLocaleString()}
+                    <p><strong>Description:</strong> {character.description}</p>
                 </div>
             )}
 

@@ -220,7 +220,7 @@ All endpoints are served from `http://localhost:3000`.
 {
   "name": "John Henry",
   "alias": "The Steel-Driving Man",
-  "core_traits": "Strength, determination",
+  "description": "Strength, determination",
   "origin_name": "Post-Civil War America"
 }
 ```
@@ -242,7 +242,7 @@ characters (
   id          SERIAL PRIMARY KEY,
   name        VARCHAR(255) NOT NULL,
   alias       VARCHAR(255),
-  core_traits TEXT,
+  description TEXT,
   origin_id   INTEGER REFERENCES origins(id) ON DELETE SET NULL
 )
 

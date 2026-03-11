@@ -7,7 +7,7 @@ function AddCharacterForm({onCharacterAdded}) {
     const [formData, setFormData] = useState({
         name: '',
         alias: '',
-        core_traits: '',
+        description: '',
         origin_name: ''
     });
 
@@ -28,7 +28,7 @@ function AddCharacterForm({onCharacterAdded}) {
             });
 
             if (response.ok) {
-                setFormData({name: '', alias: '', core_traits: '', origin_name: ''});
+                setFormData({name: '', alias: '', description: '', origin_name: ''});
                 onCharacterAdded();
                 setIsCollapsed(true); // Automatically collapse after successful addition
             }
@@ -63,8 +63,8 @@ function AddCharacterForm({onCharacterAdded}) {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="core_traits">Core Traits:</label>
-                        <textarea id="core_traits" name="core_traits" value={formData.core_traits}
+                        <label htmlFor="description">Core Traits:</label>
+                        <textarea id="description" name="description" value={formData.description}
                                   onChange={handleChange} maxLength={1000}/>
                     </div>
 
