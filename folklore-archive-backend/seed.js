@@ -133,57 +133,51 @@ const seedDatabase = async () => {
         await pool.query(`
             INSERT INTO characters (name, alias, description, origin_id) VALUES
             ('Arthur Pendragon', 'King Arthur', 'Chivalrous, burdened by destiny, noble leader', 1),
-            ('Sir Galahad', 'The Knight of Purity', 'Flawless, devout, spiritually enlightened', 1),
-            ('Sir Percival', 'The Knight of The Dove', 'Naive but pure-hearted, determined seeker', 1),
-            ('Sir Bors', 'The Steadfast', 'Loyal, grounded, reliable survivor', 1),
-            ('Sir Gawain', 'Knight of the Sun', 'Courteous, flawed but honorable, fiercely loyal', 1),
-            ('Sir Lancelot', 'Knight of the Lake', 'Unmatched in combat, tragically conflicted by forbidden love', 1),
+            ('Galahad', 'The Knight of Purity', 'Flawless, devout, spiritually enlightened', 1),
+            ('Percival', 'The Knight of The Dove', 'Naive but pure-hearted, determined seeker', 1),
+            ('Bors', 'The Steadfast', 'Loyal, grounded, reliable survivor', 1),
+            ('Gawain', 'Knight of the Sun', 'Courteous, flawed but honorable, fiercely loyal', 1),
+            ('Lancelot du Lac', 'Knight of the Lake', 'Unmatched in combat, tragically conflicted by forbidden love', 1),
             ('Gilgamesh', 'King of Uruk', 'Arrogant, immensely powerful, driven by a fear of mortality', 2),
             ('Enkidu', 'The Wild Man', 'In tune with nature, fiercely loyal companion', 2),
             ('Heracles', 'Hercules', 'Unfathomable strength, tragic temper, resilient to suffering', 3),
             ('Robin Hood', 'Prince of Thieves', 'Cunning, masterful archer, champion of the poor', 4),
             ('John Henry', 'The Steel-Driving Man', 'Immense strength, determination, unyielding human spirit', 5);
+            ('Mordred', 'Knight of Treachery', 'Cunning, ambitious, driven by resentment and desire for power', 1),
         `);
 
         // Insert Stories
         await pool.query(`
-            INSERT INTO stories (title, synopsis, content, publication_date) VALUES
-            (
-                'The Sword in the Stone', 
-                'A young boy proves his divine right to rule Britain.', 
-                'After King Uther''s death, Britain fell into chaos. The wizard Merlin placed a sword in an anvil atop a stone, proclaiming that only the true king could draw it. For years, the strongest knights failed the test.\n\nYoung Arthur, serving humbly as a squire, effortlessly pulled the blade to replace his foster brother''s lost sword. In doing so, he revealed his royal lineage and accepted his destiny to unite the fractured realm.', 
-                '15th Century'
-            ),
-            (
-                'The Quest for the Holy Grail', 
-                'The ultimate spiritual journey of the Round Table.', 
-                'The pursuit of the Holy Grail was the highest calling a knight could answer. It promised divine grace and ultimate spiritual fulfillment. However, it was a quest that required absolute purity of heart, a standard that disqualified many of Arthur''s greatest champions.\n\nUltimately, only three knights achieved the Grail. Sir Galahad was lifted to heaven upon seeing it. Sir Percival became the new Grail King. Sir Bors returned to Camelot to tell the tale. Even the mighty Sir Lancelot was denied the ultimate vision due to his earthly sins.', 
-                '15th Century'
-            ),
-            (
-                'The Epic of Gilgamesh', 
-                'A tyrannical king learns the value of friendship and the inevitability of death.', 
-                'Gilgamesh, the tyrannical king of Uruk, is challenged by the wild man Enkidu. After a fierce battle that shakes the heavens, they become closest friends and embark on monster-slaying adventures. They defeat the demon Humbaba and slay the Bull of Heaven.\n\nWhen the gods punish them by taking Enkidu''s life, a heartbroken Gilgamesh journeys to the edge of the world searching for the secret to immortality. He ultimately realizes that human life is finite, but one''s legacy endures through their works.', 
-                'c. 2100 BCE'
-            ),
-            (
-                'The Twelve Labors of Heracles', 
-                'A hero performs impossible feats to atone for a terrible crime.', 
-                'Driven mad by the goddess Hera, Heracles commits an unforgivable crime against his own family. To atone, the Oracle of Delphi orders him to serve King Eurystheus and complete a series of impossible tasks.\n\nThese twelve labors pushed Heracles to his absolute limits. He strangled the Nemean Lion, outsmarted the hydra, cleaned the Augean stables in a single day, and even descended into the Underworld to capture the hellhound Cerberus. Through these trials, he earned his place among the gods.', 
-                'Mythological Era'
-            ),
-            (
-                'The Merry Adventures of Robin Hood', 
-                'An outlaw steals from the rich to give to the poor in Sherwood Forest.', 
-                'Deep in Sherwood Forest, the outlaw Robin Hood and his Merry Men wage a guerilla campaign against the corrupt Sheriff of Nottingham. A master archer and champion of the common folk, Robin relieves the greedy nobility of their wealth to support the overtaxed villagers.\n\nThrough clever disguises, archery tournaments, and daring rescues, Robin outwits his enemies at every turn, keeping the spirit of justice alive while waiting for the rightful return of King Richard.', 
-                '13th Century'
-            ),
-            (
-                'John Henry''s Race', 
-                'A legendary steel-driver goes head-to-head with a steam powered machine.', 
-                'As the railroads pushed westward across America, the invention of the steam-powered drill threatened the livelihood of manual laborers. John Henry, an incredibly strong steel-driver, refused to be replaced by a machine.\n\nHe challenged the steam drill to a race through the mountain. Swinging his hammers with impossible speed and power, he beat the machine. However, the immense effort caused his heart to give out, and he died with his hammer in his hand, becoming an eternal symbol of human resilience.', 
-                'Late 19th Century'
-            );
+            INSERT INTO stories (title, synopsis, content, publication_date)
+            VALUES ('The Sword in the Stone',
+                    'A young boy proves his divine right to rule Britain.',
+                    'After King Uther''s death, Britain fell into chaos. The wizard Merlin placed the Sword of Selection, "Caliburn" in an anvil atop a stone, proclaiming that only the true king could draw it. For years, the strongest knights failed the test.\n\nYoung Arthur, serving humbly as the squire of his brother, the Knight Sir Kay, effortlessly pulled the blade to replace his foster brother''s lost sword. In doing so, he revealed his royal lineage and accepted his destiny as the ''Once and Future King'' to unite the fractured realm.',
+                    '15th Century'),
+                   ('The Quest for the Holy Grail',
+                    'The ultimate spiritual journey of the Round Table.',
+                    'The pursuit of the Holy Grail was the highest calling a knight could answer. It promised divine grace and ultimate spiritual fulfillment. However, it was a quest that required absolute purity of heart, a standard that disqualified many of Arthur''s greatest champions.\n\nUltimately, only three knights achieved the Grail. Sir Galahad was lifted to heaven upon seeing it. Sir Percival became the new Grail King. Sir Bors returned to Camelot to tell the tale. Even the mighty Sir Lancelot was denied the ultimate vision due to his earthly sins.',
+                    '15th Century'),
+                   ('The Epic of Gilgamesh',
+                    'A tyrannical king learns the value of friendship and the inevitability of death.',
+                    'Gilgamesh, the tyrannical king of Uruk, is challenged by the wild man Enkidu. After a fierce battle that shakes the heavens, they become closest friends and embark on monster-slaying adventures. They defeat the demon Humbaba and slay the Bull of Heaven.\n\nWhen the gods punish them by taking Enkidu''s life, a heartbroken Gilgamesh journeys to the edge of the world searching for the secret to immortality. He ultimately realizes that human life is finite, but one''s legacy endures through their works.',
+                    'c. 2100 BCE'),
+                   ('The Twelve Labors of Heracles',
+                    'A hero performs impossible feats to atone for a terrible crime.',
+                    'Driven mad by the goddess Hera, Heracles commits an unforgivable crime against his own family. To atone, the Oracle of Delphi orders him to serve King Eurystheus and complete a series of impossible tasks.\n\nThese twelve labors pushed Heracles to his absolute limits. He strangled the Nemean Lion, outsmarted the hydra, cleaned the Augean stables in a single day, and even descended into the Underworld to capture the hellhound Cerberus. Through these trials, he earned his place among the gods.',
+                    'Mythological Era'),
+                   ('The Merry Adventures of Robin Hood',
+                    'An outlaw steals from the rich to give to the poor in Sherwood Forest.',
+                    'Deep in Sherwood Forest, the outlaw Robin Hood and his Merry Men wage a guerilla campaign against the corrupt Sheriff of Nottingham. A master archer and champion of the common folk, Robin relieves the greedy nobility of their wealth to support the overtaxed villagers.\n\nThrough clever disguises, archery tournaments, and daring rescues, Robin outwits his enemies at every turn, keeping the spirit of justice alive while waiting for the rightful return of King Richard.',
+                    '13th Century'),
+                   ('John Henry''s Race',
+                    'A legendary steel-driver goes head-to-head with a steam powered machine.',
+                    'As the railroads pushed westward across America, the invention of the steam-powered drill threatened the livelihood of manual laborers. John Henry, an incredibly strong steel-driver, refused to be replaced by a machine.\n\nHe challenged the steam drill to a race through the mountain. Swinging his hammers with impossible speed and power, he beat the machine. However, the immense effort caused his heart to give out, and he died with his hammer in his hand, becoming an eternal symbol of human resilience.',
+                    'Late 19th Century'),
+                    (
+                    'Le Morte d''Arthur (THe Death of Arthur)',
+                    'The tragic downfall of a legendary king and his knights.',
+                    'As Arthur''s reign reached its zenith, the seeds of his downfall were sown. The love affair between Sir Lancelot and Queen Guinevere fractured the Round Table, leading to bitter rivalries and betrayals. The quest for the Holy Grail further exposed the knights'' flaws, as only the purest could succeed.\n\nIn the end, Arthur faced his illegitimate son Mordred in a final battle that left both mortally wounded. As he lay dying, Arthur entrusted his kingdom to Sir Bedivere and was taken to the mystical Isle of Avalon, where he is said to await a time when Britain needs him most.'
+                    'Early 16th Century');
         `);
 
         // Insert Character-Story Links
@@ -206,6 +200,7 @@ const seedDatabase = async () => {
             (10, 5, 'The Outlaw Leader'),
             
             (11, 6, 'The Unyielding Laborer');
+            (12, 7, 'The Tragic Antagonist');
         `);
 
         // Insert Default Tags
@@ -218,6 +213,7 @@ const seedDatabase = async () => {
         await pool.query(`
             INSERT INTO character_tags (character_id, tag_id) VALUES
             (1, 4), -- Arthur: Heroic Journey
+            (1, 2), -- Arthur: Folklore
             (7, 1), -- Gilgamesh: Mythology
             (7, 3), -- Gilgamesh: Tragedy
             (10, 2); -- Robin Hood: Folklore
@@ -229,6 +225,7 @@ const seedDatabase = async () => {
             (3, 1), -- Gilgamesh: Mythology
             (3, 3), -- Gilgamesh: Tragedy
             (5, 2); -- Robin Hood: Folklore
+            (6, 3); -- Le Morte d'Arthur: Tragedy
         `);
 
         console.log('Database seeded successfully with new test data!');
