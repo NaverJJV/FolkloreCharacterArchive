@@ -142,8 +142,8 @@ const seedDatabase = async () => {
             ('Enkidu', 'The Wild Man', 'In tune with nature, fiercely loyal companion', 2),
             ('Heracles', 'Hercules', 'Unfathomable strength, tragic temper, resilient to suffering', 3),
             ('Robin Hood', 'Prince of Thieves', 'Cunning, masterful archer, champion of the poor', 4),
-            ('John Henry', 'The Steel-Driving Man', 'Immense strength, determination, unyielding human spirit', 5);
-            ('Mordred', 'Knight of Treachery', 'Cunning, ambitious, driven by resentment and desire for power', 1),
+            ('John Henry', 'The Steel-Driving Man', 'Immense strength, determination, unyielding human spirit', 5),
+            ('Mordred', 'Knight of Treachery', 'Cunning, ambitious, driven by resentment and desire for power', 1);
         `);
 
         // Insert Stories
