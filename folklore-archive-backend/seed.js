@@ -176,7 +176,7 @@ const seedDatabase = async () => {
                     (
                     'Le Morte d''Arthur (THe Death of Arthur)',
                     'The tragic downfall of a legendary king and his knights.',
-                    'As Arthur''s reign reached its zenith... where he is said to await a time when Britain needs him most.', /* <-- COMMA ADDED HERE */
+                    'As Arthur''s reign reached its zenith, the seeds of his downfall were sown. The love affair between Sir Lancelot and Queen Guinevere fractured the Round Table, leading to bitter rivalries and betrayals. The quest for the Holy Grail further exposed the knights'' flaws, as only the purest could succeed.\\n\\nIn the end, Arthur faced his illegitimate son Mordred in a final battle that left both mortally wounded. As he lay dying, Arthur entrusted his kingdom to Sir Bedivere and was taken to the mystical Isle of Avalon, where he is said to await a time when Britain needs him most.',
                     'Early 16th Century');
         `);
 
@@ -200,7 +200,9 @@ const seedDatabase = async () => {
             (10, 5, 'The Outlaw Leader'),
             
             (11, 6, 'The Unyielding Laborer'),
-            (12, 7, 'The Tragic Antagonist');
+            
+            (1,7, 'The Legendary King'),
+            (12, 7, 'The Treacherous Usurper');
         `);
 
         // Insert Default Tags
