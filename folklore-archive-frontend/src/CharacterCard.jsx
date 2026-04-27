@@ -33,7 +33,7 @@ function CharacterCard({character, onDelete, onEdit}) {
                 <input type="text" name="alias" value={editData.alias} onChange={handleChange} maxLength={255}/>
                 <textarea name="description" value={editData.description} onChange={handleChange} maxLength={1000}/>
                 <div className="form-group">
-                    <label>Origin:</label>
+                    <label>Era:</label>
                     <input
                         type="text"
                         name="origin_name"
