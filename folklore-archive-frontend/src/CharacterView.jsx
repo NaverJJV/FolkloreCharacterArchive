@@ -12,14 +12,20 @@ function CharacterView() {
     const [editingField, setEditingField] = useState(null);
     const [editData, setEditData] = useState({ name: '', alias: '', description: '' });
 
+    const [tags, setTags] = useState([]);
+    const [newTag, setNewTag] = useState('');
+    const [isAddingTag, setIsAddingTag] = useState(false);
+
     const fetchData = () => {
         Promise.all([
             fetch(`http://localhost:3000/api/characters/${id}`).then(res => res.json()),
-            fetch(`http://localhost:3000/api/characters/${id}/stories`).then(res => res.json())
+            fetch(`http://localhost:3000/api/characters/${id}/stories`).then(res => res.json()),
+            fetch(`http://localhost:3000/api/characters/${id}/tags`).then(res => res.json())
         ])
-            .then(([charData, storyData]) => {
+            .then(([charData, storyData, tagData]) => {
                 setCharacter(charData);
                 setStories(storyData);
+                setTags(tagData);
                 setEditData({
                     name: charData.name,
                     alias: charData.alias || '',
@@ -44,6 +50,28 @@ function CharacterView() {
                 setEditingField(null);
                 fetchData();
             }
+        } catch (err) { console.error(err); }
+    };
+
+    const handleAddTag = async (e) => {
+        e.preventDefault();
+        if (!newTag.trim()) return;
+        try {
+            await fetch(`http://localhost:3000/api/characters/${id}/tags`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newTag.trim() })
+            });
+            setNewTag('');
+            setIsAddingTag(false);
+            fetchData();
+        } catch (err) { console.error(err); }
+    };
+
+    const handleRemoveTag = async (tagId) => {
+        try {
+            await fetch(`http://localhost:3000/api/characters/${id}/tags/${tagId}`, { method: 'DELETE' });
+            fetchData();
         } catch (err) { console.error(err); }
     };
 
@@ -103,6 +131,25 @@ function CharacterView() {
                         <p>{character.description || "No description provided."}</p>
                         <button className="inline-edit-icon" onClick={() => setEditingField('description')}>&#x270E;</button>
                     </div>
+                )}
+            </div>
+
+            <div className="tag-container">
+                {tags.map(tag => (
+                    <span key={tag.id} className="tag-pill">
+                        {tag.name}
+                        <button className="tag-remove" onClick={() => handleRemoveTag(tag.id)}>&times;</button>
+                    </span>
+                ))}
+
+                {!isAddingTag ? (
+                    <button className="toggle-button" style={{ padding: '0.2rem 0.5rem', fontSize: '0.7rem', width: 'auto' }} onClick={() => setIsAddingTag(true)}>+ Add Tag</button>
+                ) : (
+                    <form onSubmit={handleAddTag} className="add-tag-form" style={{ margin: 0 }}>
+                        <input type="text" value={newTag} onChange={e => setNewTag(e.target.value)} className="add-tag-input" placeholder="New tag..." autoFocus />
+                        <button type="submit" className="edit-button" style={{ padding: '0.2rem 0.5rem', width: 'auto' }}>Save</button>
+                        <button type="button" className="toggle-button" style={{ padding: '0.2rem 0.5rem', width: 'auto' }} onClick={() => setIsAddingTag(false)}>Cancel</button>
+                    </form>
                 )}
             </div>
 

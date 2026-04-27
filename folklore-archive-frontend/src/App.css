@@ -409,3 +409,62 @@
 .edit-tale-btn:hover {
   background-color: var(--color-ember);
 }
+
+/* ── Tag System ─────────────────────────────── */
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.tag-pill {
+  background-color: var(--color-parchment-deep);
+  color: var(--color-ink-soft);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(107, 85, 68, 0.15);
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.tag-remove:hover {
+  color: var(--color-danger);
+  background: none;
+  box-shadow: none;
+  transform: scale(1.1);
+}
+
+.add-tag-form {
+  display: flex;
+  gap: 5px;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+
+.add-tag-input {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-card);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  width: 150px;
+}

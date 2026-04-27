@@ -20,18 +20,22 @@ function StoryView() {
     const [charSearchTerm, setCharSearchTerm] = useState('');
     const [showDropdown, setShowDropdown] = useState(false);
 
+    const [tags, setTags] = useState([]);
+    const [newTag, setNewTag] = useState('');
+    const [isAddingTag, setIsAddingTag] = useState(false);
+
     const fetchData = () => {
         Promise.all([
             fetch(`http://localhost:3000/api/stories/${id}`).then(res => res.json()),
             fetch(`http://localhost:3000/api/stories/${id}/characters`).then(res => res.json()),
-            fetch(`http://localhost:3000/api/characters`).then(res => res.json())
+            fetch(`http://localhost:3000/api/characters`).then(res => res.json()),
+            fetch(`http://localhost:3000/api/stories/${id}/tags`).then(res => res.json())
         ])
-            .then(([storyData, linkedChars, fullRoster]) => {
+            .then(([storyData, linkedChars, fullRoster, tagData]) => {
                 setStory(storyData);
                 setCharacters(linkedChars);
                 setAllCharacters(fullRoster);
-
-                // No more complex date parsing needed!
+                setTags(tagData);
                 setEditStoryData({
                     title: storyData.title,
                     synopsis: storyData.synopsis || '',
@@ -99,6 +103,28 @@ function StoryView() {
         } catch (err) { console.error(err); }
     };
 
+    const handleAddTag = async (e) => {
+        e.preventDefault();
+        if (!newTag.trim()) return;
+        try {
+            await fetch(`http://localhost:3000/api/stories/${id}/tags`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newTag.trim() })
+            });
+            setNewTag('');
+            setIsAddingTag(false);
+            fetchData();
+        } catch (err) { console.error(err); }
+    };
+
+    const handleRemoveTag = async (tagId) => {
+        try {
+            await fetch(`http://localhost:3000/api/stories/${id}/tags/${tagId}`, { method: 'DELETE' });
+            fetchData();
+        } catch (err) { console.error(err); }
+    };
+
     if (loading) return <div className="App"><h2>Loading story details...</h2></div>;
     if (!story || story.message) return <div className="App"><h2>Story not found.</h2></div>;
 
@@ -156,6 +182,25 @@ function StoryView() {
                         <button className="inline-edit-icon" onClick={() => setEditingField('synopsis')} title="Edit Synopsis">&#x270E;</button>
                     </div>
                 )}
+
+                <div className="tag-container">
+                    {tags.map(tag => (
+                        <span key={tag.id} className="tag-pill">
+                        {tag.name}
+                            <button className="tag-remove" onClick={() => handleRemoveTag(tag.id)}>&times;</button>
+                    </span>
+                    ))}
+
+                    {!isAddingTag ? (
+                        <button className="toggle-button" style={{ padding: '0.2rem 0.5rem', fontSize: '0.7rem', width: 'auto' }} onClick={() => setIsAddingTag(true)}>+ Add Tag</button>
+                    ) : (
+                        <form onSubmit={handleAddTag} className="add-tag-form" style={{ margin: 0 }}>
+                            <input type="text" value={newTag} onChange={e => setNewTag(e.target.value)} className="add-tag-input" placeholder="New tag..." autoFocus />
+                            <button type="submit" className="edit-button" style={{ padding: '0.2rem 0.5rem', width: 'auto' }}>Save</button>
+                            <button type="button" className="toggle-button" style={{ padding: '0.2rem 0.5rem', width: 'auto' }} onClick={() => setIsAddingTag(false)}>Cancel</button>
+                        </form>
+                    )}
+                </div>
 
                 {story.updated_at && (
                     <p style={{ fontSize: '0.8rem', color: 'var(--color-ink-muted)', fontStyle: 'italic', marginTop: '1rem' }}>

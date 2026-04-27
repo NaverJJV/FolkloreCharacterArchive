@@ -19,6 +19,9 @@ const seedDatabase = async () => {
             DROP TABLE IF EXISTS stories CASCADE;
             DROP TABLE IF EXISTS characters CASCADE;
             DROP TABLE IF EXISTS origins CASCADE;
+            DROP TABLE IF EXISTS character_tags CASCADE;
+            DROP TABLE IF EXISTS story_tags CASCADE;
+            DROP TABLE IF EXISTS tags CASCADE;
         `);
 
         console.log('Creating tables and triggers...');
@@ -34,53 +37,83 @@ const seedDatabase = async () => {
         `);
 
         await pool.query(`
-            CREATE TABLE origins (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
+            CREATE TABLE origins
+            (
+                id             SERIAL PRIMARY KEY,
+                name           VARCHAR(255) NOT NULL,
                 historical_era VARCHAR(255),
-                description TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                description    TEXT,
+                created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
-            CREATE TRIGGER update_origins_modtime 
-            BEFORE UPDATE ON origins FOR EACH ROW 
-            EXECUTE FUNCTION update_modified_column();
+            CREATE TRIGGER update_origins_modtime
+                BEFORE UPDATE
+                ON origins
+                FOR EACH ROW
+                EXECUTE FUNCTION update_modified_column();
 
-            CREATE TABLE characters (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                alias VARCHAR(255),
+            CREATE TABLE characters
+            (
+                id          SERIAL PRIMARY KEY,
+                name        VARCHAR(255) NOT NULL,
+                alias       VARCHAR(255),
                 description TEXT,
-                origin_id INTEGER REFERENCES origins(id) ON DELETE SET NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                origin_id   INTEGER      REFERENCES origins (id) ON DELETE SET NULL,
+                created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
-            CREATE TRIGGER update_characters_modtime 
-            BEFORE UPDATE ON characters FOR EACH ROW 
-            EXECUTE FUNCTION update_modified_column();
+            CREATE TRIGGER update_characters_modtime
+                BEFORE UPDATE
+                ON characters
+                FOR EACH ROW
+                EXECUTE FUNCTION update_modified_column();
 
-            CREATE TABLE stories (
-                id SERIAL PRIMARY KEY,
-                title VARCHAR(255) NOT NULL,
-                synopsis TEXT,
-                content TEXT,
+            CREATE TABLE stories
+            (
+                id               SERIAL PRIMARY KEY,
+                title            VARCHAR(255) NOT NULL,
+                synopsis         TEXT,
+                content          TEXT,
                 publication_date VARCHAR(100),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
-            CREATE TRIGGER update_stories_modtime 
-            BEFORE UPDATE ON stories FOR EACH ROW 
-            EXECUTE FUNCTION update_modified_column();
+            CREATE TRIGGER update_stories_modtime
+                BEFORE UPDATE
+                ON stories
+                FOR EACH ROW
+                EXECUTE FUNCTION update_modified_column();
 
-            CREATE TABLE character_stories (
-                character_id INTEGER REFERENCES characters(id) ON DELETE CASCADE,
-                story_id INTEGER REFERENCES stories(id) ON DELETE CASCADE,
-                role VARCHAR(100),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            CREATE TABLE character_stories
+            (
+                character_id INTEGER REFERENCES characters (id) ON DELETE CASCADE,
+                story_id     INTEGER REFERENCES stories (id) ON DELETE CASCADE,
+                role         VARCHAR(100),
+                created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (character_id, story_id)
+            );
+
+            CREATE TABLE tags
+            (
+                id   SERIAL PRIMARY KEY,
+                name VARCHAR(100) UNIQUE NOT NULL
+            );
+
+            CREATE TABLE character_tags
+            (
+                character_id INTEGER REFERENCES characters (id) ON DELETE CASCADE,
+                tag_id       INTEGER REFERENCES tags (id) ON DELETE CASCADE,
+                PRIMARY KEY (character_id, tag_id)
+            );
+
+            CREATE TABLE story_tags
+            (
+                story_id INTEGER REFERENCES stories (id) ON DELETE CASCADE,
+                tag_id   INTEGER REFERENCES tags (id) ON DELETE CASCADE,
+                PRIMARY KEY (story_id, tag_id)
             );
         `);
 
@@ -100,12 +133,12 @@ const seedDatabase = async () => {
         await pool.query(`
             INSERT INTO characters (name, alias, description, origin_id) VALUES
             ('Arthur Pendragon', 'King Arthur', 'Chivalrous, burdened by destiny, noble leader', 1),
-            ('Sir Galahad', 'The Pure Knight', 'Flawless, devout, spiritually enlightened', 1),
-            ('Sir Percival', 'The Innocent Fool', 'Naive but pure-hearted, determined seeker', 1),
+            ('Sir Galahad', 'The Knight of Purity', 'Flawless, devout, spiritually enlightened', 1),
+            ('Sir Percival', 'The Knight of The Dove', 'Naive but pure-hearted, determined seeker', 1),
             ('Sir Bors', 'The Steadfast', 'Loyal, grounded, reliable survivor', 1),
             ('Sir Gawain', 'Knight of the Sun', 'Courteous, flawed but honorable, fiercely loyal', 1),
-            ('Sir Lancelot', 'Knight of the Cart', 'Unmatched in combat, tragically conflicted by forbidden love', 1),
-            ('Gilgamesh', 'King of Heroes', 'Arrogant, immensely powerful, driven by a fear of mortality', 2),
+            ('Sir Lancelot', 'Knight of the Lake', 'Unmatched in combat, tragically conflicted by forbidden love', 1),
+            ('Gilgamesh', 'King of Uruk', 'Arrogant, immensely powerful, driven by a fear of mortality', 2),
             ('Enkidu', 'The Wild Man', 'In tune with nature, fiercely loyal companion', 2),
             ('Heracles', 'Hercules', 'Unfathomable strength, tragic temper, resilient to suffering', 3),
             ('Robin Hood', 'Prince of Thieves', 'Cunning, masterful archer, champion of the poor', 4),
@@ -173,6 +206,29 @@ const seedDatabase = async () => {
             (10, 5, 'The Outlaw Leader'),
             
             (11, 6, 'The Unyielding Laborer');
+        `);
+
+        // Insert Default Tags
+        await pool.query(`
+            INSERT INTO tags (name) VALUES
+            ('Mythology'), ('Folklore'), ('Tragedy'), ('Heroic Journey'), ('Magic');
+        `);
+
+        // Link Tags to Characters
+        await pool.query(`
+            INSERT INTO character_tags (character_id, tag_id) VALUES
+            (1, 4), -- Arthur: Heroic Journey
+            (7, 1), -- Gilgamesh: Mythology
+            (7, 3), -- Gilgamesh: Tragedy
+            (10, 2); -- Robin Hood: Folklore
+        `);
+
+        // Link Tags to Stories
+        await pool.query(`
+            INSERT INTO story_tags (story_id, tag_id) VALUES
+            (3, 1), -- Gilgamesh: Mythology
+            (3, 3), -- Gilgamesh: Tragedy
+            (5, 2); -- Robin Hood: Folklore
         `);
 
         console.log('Database seeded successfully with new test data!');

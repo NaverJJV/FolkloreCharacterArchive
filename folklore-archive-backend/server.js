@@ -545,3 +545,99 @@ app.delete('/api/stories/:storyId/characters/:characterId', async (req, res) => 
         res.status(500).send('Server Error');
     }
 });
+
+// --- TAG SYSTEM ROUTES ---
+
+// GET all available tags (for a dropdown/autocomplete)
+app.get('/api/tags', async (req, res) => {
+    try {
+        const tags = await pool.query('SELECT * FROM tags ORDER BY name ASC');
+        res.json(tags.rows);
+    } catch (err) {
+        res.status(500).send('Server Error');
+    }
+});
+
+// Helper function to find or create a tag
+async function findOrCreateTag(tagName) {
+    const trimmedName = tagName.trim();
+    let tagRes = await pool.query('SELECT id FROM tags WHERE LOWER(name) = LOWER($1)', [trimmedName]);
+    if (tagRes.rows.length === 0) {
+        tagRes = await pool.query('INSERT INTO tags (name) VALUES ($1) RETURNING id', [trimmedName]);
+    }
+    return tagRes.rows[0].id;
+}
+
+// GET tags for a specific character
+app.get('/api/characters/:id/tags', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tags = await pool.query(`
+            SELECT t.id, t.name FROM tags t
+            JOIN character_tags ct ON t.id = ct.tag_id
+            WHERE ct.character_id = $1 ORDER BY t.name ASC
+        `, [id]);
+        res.json(tags.rows);
+    } catch (err) { res.status(500).send('Server Error'); }
+});
+
+// POST link a tag to a character
+app.post('/api/characters/:id/tags', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+        if (!name) return res.status(400).json({ message: "Tag name is required" });
+
+        const tagId = await findOrCreateTag(name);
+        await pool.query(
+            'INSERT INTO character_tags (character_id, tag_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+            [id, tagId]
+        );
+        res.json({ message: "Tag added" });
+    } catch (err) { res.status(500).send('Server Error'); }
+});
+
+// DELETE link between character and tag
+app.delete('/api/characters/:charId/tags/:tagId', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM character_tags WHERE character_id = $1 AND tag_id = $2', [req.params.charId, req.params.tagId]);
+        res.json({ message: "Tag removed" });
+    } catch (err) { res.status(500).send('Server Error'); }
+});
+
+// GET tags for a specific story
+app.get('/api/stories/:id/tags', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const tags = await pool.query(`
+            SELECT t.id, t.name FROM tags t
+            JOIN story_tags st ON t.id = st.tag_id
+            WHERE st.story_id = $1 ORDER BY t.name ASC
+        `, [id]);
+        res.json(tags.rows);
+    } catch (err) { res.status(500).send('Server Error'); }
+});
+
+// POST link a tag to a story
+app.post('/api/stories/:id/tags', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+        if (!name) return res.status(400).json({ message: "Tag name is required" });
+
+        const tagId = await findOrCreateTag(name);
+        await pool.query(
+            'INSERT INTO story_tags (story_id, tag_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+            [id, tagId]
+        );
+        res.json({ message: "Tag added" });
+    } catch (err) { res.status(500).send('Server Error'); }
+});
+
+// DELETE link between story and tag
+app.delete('/api/stories/:storyId/tags/:tagId', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM story_tags WHERE story_id = $1 AND tag_id = $2', [req.params.storyId, req.params.tagId]);
+        res.json({ message: "Tag removed" });
+    } catch (err) { res.status(500).send('Server Error'); }
+});
