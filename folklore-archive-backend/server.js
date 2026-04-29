@@ -323,11 +323,11 @@ app.get('/api/stories', async (req, res) => {
     }
 });
 
-// GET the 4 most recently added stories for the dashboard
+// GET the 2 most recently added stories for the dashboard
 app.get('/api/stories/recent', async (req, res) => {
     try {
         const recentStories = await pool.query(
-            'SELECT * FROM stories ORDER BY created_at DESC LIMIT 4'
+            'SELECT * FROM stories ORDER BY created_at DESC LIMIT 2'
         );
         res.json(recentStories.rows);
     } catch (err) {
