@@ -172,22 +172,45 @@ function CharacterView() {
                             </form>
                         )}
                     </div>
+
+                    <div className="embedded-description" style={{ borderTop: '1px solid var(--border-light)', paddingTop: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '0.5rem' }}>
+                            <h3 style={{ margin: 0, fontFamily: 'var(--font-display)', color: 'var(--color-ink-soft)', fontSize: '1.1rem' }}>Description</h3>
+                            {editingField !== 'description' && (
+                                <button className="inline-edit-icon" onClick={() => setEditingField('description')} style={{ opacity: 0.5 }}>&#x270E;</button>
+                            )}
+                        </div>
+
+                        {editingField === 'description' ? (
+                            <div className="inline-edit-group synopsis-edit">
+                                <textarea value={editData.description} onChange={(e) => setEditData({...editData, description: e.target.value})} autoFocus maxLength={1000} style={{ minHeight: '100px' }} />
+                                <div className="edit-actions" style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                                    <button onClick={() => setEditingField(null)} className="toggle-button">Cancel</button>
+                                    <button onClick={handleSaveDetail} className="edit-button">Save</button>
+                                </div>
+                            </div>
+                        ) : (
+                            <p style={{ margin: 0, color: 'var(--color-ink-soft)', whiteSpace: 'pre-wrap', textAlign: 'left', lineHeight: '1.6' }}>
+                                {character.description || <span style={{ fontStyle: 'italic', color: 'var(--color-ink-muted)' }}>No description provided.</span>}
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
 
             {/* Profile Content Sections */}
+            <ProfileSection
+                title="Story Synopsis"
+                field="story_synopsis"
+                value={character.story_synopsis}
+                editValue={editData.story_synopsis}
+                isEditing={editingField === 'story_synopsis'}
+                onEdit={() => setEditingField('story_synopsis')}
+                onChange={(e) => setEditData({...editData, story_synopsis: e.target.value})}
+                onSave={handleSaveDetail}
+                onCancel={() => setEditingField(null)}
+            />
             <div className="profile-content-sections">
-                <ProfileSection
-                    title="Description"
-                    field="description"
-                    value={character.description}
-                    editValue={editData.description}
-                    isEditing={editingField === 'description'}
-                    onEdit={() => setEditingField('description')}
-                    onChange={(e) => setEditData({...editData, description: e.target.value})}
-                    onSave={handleSaveDetail}
-                    onCancel={() => setEditingField(null)}
-                />
                 <ProfileSection
                     title="Appearance"
                     field="appearance"
@@ -207,17 +230,6 @@ function CharacterView() {
                     isEditing={editingField === 'personality'}
                     onEdit={() => setEditingField('personality')}
                     onChange={(e) => setEditData({...editData, personality: e.target.value})}
-                    onSave={handleSaveDetail}
-                    onCancel={() => setEditingField(null)}
-                />
-                <ProfileSection
-                    title="Story Synopsis"
-                    field="story_synopsis"
-                    value={character.story_synopsis}
-                    editValue={editData.story_synopsis}
-                    isEditing={editingField === 'story_synopsis'}
-                    onEdit={() => setEditingField('story_synopsis')}
-                    onChange={(e) => setEditData({...editData, story_synopsis: e.target.value})}
                     onSave={handleSaveDetail}
                     onCancel={() => setEditingField(null)}
                 />
