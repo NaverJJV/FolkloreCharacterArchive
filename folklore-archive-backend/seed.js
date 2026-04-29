@@ -55,13 +55,17 @@ const seedDatabase = async () => {
 
             CREATE TABLE characters
             (
-                id          SERIAL PRIMARY KEY,
-                name        VARCHAR(255) NOT NULL,
-                alias       VARCHAR(255),
-                description TEXT,
-                origin_id   INTEGER      REFERENCES origins (id) ON DELETE SET NULL,
-                created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                id             SERIAL PRIMARY KEY,
+                name           VARCHAR(255) NOT NULL,
+                alias          VARCHAR(255),
+                description    TEXT,
+                story_synopsis TEXT,
+                appearance     TEXT,
+                personality    TEXT,
+                image_url      TEXT,
+                origin_id      INTEGER REFERENCES origins (id) ON DELETE SET NULL,
+                created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
 
             CREATE TRIGGER update_characters_modtime
@@ -143,7 +147,12 @@ const seedDatabase = async () => {
             ('Heracles', 'Hercules', 'Unfathomable strength, tragic temper, resilient to suffering', 3),
             ('Robin Hood', 'Prince of Thieves', 'Cunning, masterful archer, champion of the poor', 4),
             ('John Henry', 'The Steel-Driving Man', 'Immense strength, determination, unyielding human spirit', 5),
-            ('Mordred', 'Knight of Treachery', 'Cunning, ambitious, driven by resentment and desire for power', 1);
+            ('Mordred', 'Knight of Treachery', 'Cunning, ambitious, driven by resentment and desire for power', 1),
+            ('Merlin', 'The Enigmatic Wizard', 'Wise, mysterious, powerful sorcerer and advisor to King Arthur', 1);
+            ('Uther Pendragon', 'Father of Arthur', 'Ambitious, passionate, flawed king whose actions set the stage for Arthur''s destiny', 1);
+            ('Sir Ector', 'Foster Father of Arthur', 'Noble, loyal, protective guardian who raises Arthur as his own son', 1);
+            ('Queen Guinevere', 'The Queen of Camelot', 'Graceful, intelligent, but ultimately tragic figure whose love affair with Lancelot contributes to the downfall of Camelot', 1);
+            ('Sir Kay', 'Arthur''s Foster Brother', 'Boastful, hot-tempered, but ultimately loyal knight who serves as Arthur''s squire before discovering his true identity', 1);
         `);
 
         // Insert Stories
@@ -184,6 +193,10 @@ const seedDatabase = async () => {
         await pool.query(`
             INSERT INTO character_stories (character_id, story_id, role) VALUES
             (1, 1, 'The Once and Future King'),
+            (13, 1, 'Arthur's Kingmaker''),
+            (14, 1, 'The man who put the sword in the stone')
+            (15, 1, 'Arthur's Foster Father''),
+            (16, 1, 'Arthur''s Foster Brother'),
             
             (1, 2, 'The Waiting King'),
             (2, 2, 'The Achiever of the Grail'),

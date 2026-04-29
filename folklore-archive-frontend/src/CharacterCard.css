@@ -306,3 +306,95 @@
     padding: 0.25rem 0.5rem;
     line-height: 1;
 }
+
+/* ── Character Profile View ─────────────────────── */
+.character-profile-header {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    background-color: var(--surface-card);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-medium);
+    box-shadow: var(--shadow-card);
+}
+
+.profile-identity {
+    flex: 1;
+}
+
+.profile-identity h1 {
+    margin-bottom: 0.2rem;
+    text-align: left;
+}
+
+.profile-identity h1::after {
+    display: none; /* Removes the center line from App.css */
+}
+
+/* Image Frame */
+.profile-image-container {
+    flex-shrink: 0;
+    width: 200px;
+}
+
+.profile-image-display {
+    width: 200px;
+    height: 250px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background-color: var(--color-parchment-deep);
+    border: 2px solid var(--border-medium);
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.profile-image-display img,
+.profile-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-image-preview {
+    border-radius: var(--radius-md);
+    margin: 0.5rem 0;
+    border: 1px solid var(--border-light);
+}
+
+.profile-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--color-ink-muted);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.image-edit-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(44, 31, 14, 0.7);
+    color: var(--color-parchment);
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.profile-image-display:hover .image-edit-overlay {
+    opacity: 1;
+}
+
+.profile-content-sections {
+    max-width: 850px;
+    margin: 0 auto;
+}
