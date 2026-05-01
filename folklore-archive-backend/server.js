@@ -87,20 +87,35 @@ app.get('/api/characters', async (req, res) => {
     }
 });
 
-// GET characters with their origin details
+// GET characters with their origin details and tags
 app.get('/api/characters-detailed', async (req, res) => {
     try {
         const query = `
-            SELECT 
-                characters.id, 
-                characters.name, 
-                characters.alias, 
-                characters.description,
-                characters.updated_at, 
-                origins.name AS origin_name 
-            FROM characters 
-            LEFT JOIN origins ON characters.origin_id = origins.id
-            ORDER BY characters.name ASC;
+            SELECT
+                c.id,
+                c.name,
+                c.alias,
+                c.description,
+                c.image_url,
+                c.updated_at,
+                o.name AS origin_name,
+                COALESCE(
+                                json_agg(json_build_object('id', t.id, 'name', t.name))
+                                FILTER (WHERE t.id IS NOT NULL), '[]'
+                ) AS tags
+            FROM characters c
+                     LEFT JOIN origins o ON c.origin_id = o.id
+                     LEFT JOIN character_tags ct ON c.id = ct.character_id
+                     LEFT JOIN tags t ON ct.tag_id = t.id
+            GROUP BY
+                c.id,
+                c.name,
+                c.alias,
+                c.description,
+                c.image_url,
+                c.updated_at,
+                o.name
+            ORDER BY c.name ASC;
         `;
         const detailedCharacters = await pool.query(query);
         res.json(detailedCharacters.rows);
@@ -312,10 +327,38 @@ app.post('/api/origins', async (req, res) => {
     }
 });
 
-// GET all stories
+// GET all stories with their tags
 app.get('/api/stories', async (req, res) => {
     try {
-        const allStories = await pool.query('SELECT * FROM stories ORDER BY publication_date DESC NULLS LAST, title ASC');
+        const query = `
+            SELECT
+                s.id,
+                s.title,
+                s.synopsis,
+                s.content,
+                s.image_url,
+                s.publication_date,
+                s.created_at,
+                s.updated_at,
+                COALESCE(
+                                json_agg(json_build_object('id', t.id, 'name', t.name))
+                                FILTER (WHERE t.id IS NOT NULL), '[]'
+                ) AS tags
+            FROM stories s
+                     LEFT JOIN story_tags st ON s.id = st.story_id
+                     LEFT JOIN tags t ON st.tag_id = t.id
+            GROUP BY
+                s.id,
+                s.title,
+                s.synopsis,
+                s.content,
+                s.image_url,
+                s.publication_date,
+                s.created_at,
+                s.updated_at
+            ORDER BY s.publication_date DESC NULLS LAST, s.title ASC;
+        `;
+        const allStories = await pool.query(query);
         res.json(allStories.rows);
     } catch (err) {
         console.error(err.message);

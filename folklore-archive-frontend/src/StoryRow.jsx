@@ -4,6 +4,10 @@ import './OriginRow.css';
 function StoryRow({ story, onDelete }) {
     const displayDate = story.publication_date || "Unknown Era";
 
+    // Calculate tags to display
+    const displayTags = story.tags ? story.tags.slice(0, 3) : [];
+    const extraTagsCount = story.tags ? story.tags.length - 3 : 0;
+
     return (
         <div className="origin-item">
             <button
@@ -19,6 +23,18 @@ function StoryRow({ story, onDelete }) {
             <div className="origin-header">
                 <h3>{story.title}</h3>
                 <span className="era-badge">{displayDate}</span>
+            </div>
+
+            {/* Display up to 3 tags */}
+            <div className="tag-container" style={{ justifyContent: 'flex-start', margin: '0.5rem 0' }}>
+                {displayTags.map(tag => (
+                    <span key={tag.id} className="tag-pill">{tag.name}</span>
+                ))}
+                {extraTagsCount > 0 && (
+                    <span className="tag-pill" style={{ backgroundColor: 'transparent', border: 'none', color: 'var(--color-ink-muted)' }}>
+                        +{extraTagsCount} more
+                    </span>
+                )}
             </div>
 
             <p>{story.synopsis || "No synopsis available."}</p>

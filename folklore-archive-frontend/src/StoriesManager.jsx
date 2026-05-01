@@ -32,9 +32,11 @@ function StoriesManager() {
 
     const filteredStories = stories.filter(story => {
         const searchLower = searchTerm.toLowerCase();
-        const titleMatch = (story.title || '').toLowerCase().includes(searchLower);
-        const synMatch = (story.synopsis || '').toLowerCase().includes(searchLower);
-        return titleMatch || synMatch;
+
+        const matchesTitle = story.title.toLowerCase().includes(searchLower);
+        const matchesTag = story.tags && story.tags.some(tag => tag.name.toLowerCase().includes(searchLower));
+
+        return matchesTitle || matchesTag;
     });
 
     return (

@@ -17,10 +17,12 @@ function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) 
     // Filter the characters based on the search term
     const filteredCharacters = characters.filter(char => {
         const searchLower = searchTerm.toLowerCase();
-        return (
-            char.name.toLowerCase().includes(searchLower) ||
-            (char.alias && char.alias.toLowerCase().includes(searchLower))
-        );
+
+        const matchesName = char.name.toLowerCase().includes(searchLower);
+        const matchesAlias = char.alias && char.alias.toLowerCase().includes(searchLower);
+        const matchesTag = char.tags && char.tags.some(tag => tag.name.toLowerCase().includes(searchLower));
+
+        return matchesName || matchesAlias || matchesTag;
     });
 
     // Sort the filtered characters
@@ -56,7 +58,7 @@ function ArchiveHome({ characters, fetchCharacters, handleDelete, handleEdit }) 
             <div className="search-filter-bar">
                 <input
                     type="text"
-                    placeholder="Search by name or alias..."
+                    placeholder="Search by name, alias, or tag..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"

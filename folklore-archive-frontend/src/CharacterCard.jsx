@@ -60,6 +60,11 @@ function CharacterCard({character, onDelete, onEdit}) {
                 </Link>
             </h2>
             <h3>"{character.alias}"</h3>
+            <div className="tag-container" style={{ margin: '0.5rem 0', justifyContent: 'center' }}>
+                {character.tags && character.tags.map(tag => (
+                    <span key={tag.id} className="tag-pill">{tag.name}</span>
+                ))}
+            </div>
 
             {isExpanded && (
                 <div className="character-details">
