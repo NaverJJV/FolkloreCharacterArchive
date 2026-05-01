@@ -62,9 +62,19 @@ function CharacterView() {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Ensure it's an image
+            if (!file.type.startsWith('image/')) {
+                alert('Please upload a valid image file.');
+                return;
+            }
+            // Limit size (e.g., 2MB = 2 * 1024 * 1024 bytes)
+            if (file.size > 2097152) {
+                alert('Image must be less than 2MB.');
+                return;
+            }
+
             const reader = new FileReader();
             reader.onloadend = () => {
-                // Save the base64 string to the state
                 setEditData({ ...editData, image_url: reader.result });
             };
             reader.readAsDataURL(file);
