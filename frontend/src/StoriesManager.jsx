@@ -59,7 +59,7 @@ function StoriesManager() {
             <div className="search-filter-bar" style={{ justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <input
                     type="text"
-                    placeholder="Search by title or synopsis..."
+                    placeholder="Search by title, synopsis, or tag..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
