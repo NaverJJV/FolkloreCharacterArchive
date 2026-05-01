@@ -80,6 +80,7 @@ const seedDatabase = async () => {
                 title            VARCHAR(255) NOT NULL,
                 synopsis         TEXT,
                 content          TEXT,
+                image_url        TEXT,
                 publication_date VARCHAR(100),
                 created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP
