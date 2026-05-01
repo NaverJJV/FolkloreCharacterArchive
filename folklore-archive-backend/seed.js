@@ -126,10 +126,10 @@ const seedDatabase = async () => {
         // Insert Origins
         await pool.query(`
             INSERT INTO origins (name, historical_era, description) VALUES
-            ('Arthurian Legend', 'Early Middle Ages', 'A time of chivalry, magic, and the quest for spiritual perfection in Britain.'),
+            ('Arthurian Legend', '5th-6th Century', 'A blend of history and myth centered around King Arthur and the Knights of the Round Table, set largely in at the start of the Dark Ages.'),
             ('Ancient Mesopotamia', 'c. 2100 BC', 'The cradle of civilization, featuring gods, monsters, and the earliest recorded epics.'),
             ('Ancient Greece', 'Mythological Era', 'An age where heroes walked the earth and defied the Olympian gods.'),
-            ('English Folklore', 'High Middle Ages', 'Tales of outlaws, deep forests, and rebellion against corrupt nobility.'),
+            ('English Folklore', 'High Middle Ages', 'Tales of outlaws, crusadses, deep forests, and rebellion against corrupt nobility.'),
             ('American Frontier', 'Late 19th Century', 'The era of rapid industrialization and westward expansion.');
         `);
 
@@ -148,11 +148,13 @@ const seedDatabase = async () => {
             ('Robin Hood', 'Prince of Thieves', 'Cunning, masterful archer, champion of the poor', 4),
             ('John Henry', 'The Steel-Driving Man', 'Immense strength, determination, unyielding human spirit', 5),
             ('Mordred', 'Knight of Treachery', 'Cunning, ambitious, driven by resentment and desire for power', 1),
-            ('Merlin', 'The Enigmatic Wizard', 'Wise, mysterious, powerful sorcerer and advisor to King Arthur', 1);
-            ('Uther Pendragon', 'Father of Arthur', 'Ambitious, passionate, flawed king whose actions set the stage for Arthur''s destiny', 1);
-            ('Sir Ector', 'Foster Father of Arthur', 'Noble, loyal, protective guardian who raises Arthur as his own son', 1);
-            ('Queen Guinevere', 'The Queen of Camelot', 'Graceful, intelligent, but ultimately tragic figure whose love affair with Lancelot contributes to the downfall of Camelot', 1);
-            ('Sir Kay', 'Arthur''s Foster Brother', 'Boastful, hot-tempered, but ultimately loyal knight who serves as Arthur''s squire before discovering his true identity', 1);
+            ('Merlin', 'The Enigmatic Wizard', 'Wise, mysterious, powerful sorcerer and advisor to King Arthur', 1),
+            ('Uther Pendragon', 'Father of Arthur', 'Ambitious, passionate, flawed king whose actions set the stage for Arthur''s destiny', 1),
+            ('Sir Ector', 'Foster Father of Arthur', 'Noble, loyal, protective guardian who raises Arthur as his own son', 1),
+            ('Queen Guinevere', 'The Queen of Camelot', 'Graceful, intelligent, but ultimately tragic figure whose love affair with Lancelot contributes to the downfall of Camelot', 1),
+            ('Sir Kay', 'Arthur''s Foster Brother', 'Boastful, hot-tempered, but ultimately loyal knight who serves as Arthur''s squire before discovering his true identity', 1),
+            ('Richard I', 'Richard the Lionheart', 'Valiant, charismatic, but often absent king whose reign is marked by crusades and conflict with his brother John', 4),
+            ('Hera', 'Queen of the Gods', 'Jealous, vengeful, but also protective of her own children, often causing trouble for heroes like Heracles', 3);
         `);
 
         // Insert Stories
@@ -183,7 +185,7 @@ const seedDatabase = async () => {
                     'As the railroads pushed westward across America, the invention of the steam-powered drill threatened the livelihood of manual laborers. John Henry, an incredibly strong steel-driver, refused to be replaced by a machine.\n\nHe challenged the steam drill to a race through the mountain. Swinging his hammers with impossible speed and power, he beat the machine. However, the immense effort caused his heart to give out, and he died with his hammer in his hand, becoming an eternal symbol of human resilience.',
                     'Late 19th Century'),
                     (
-                    'Le Morte d''Arthur (THe Death of Arthur)',
+                    'Le Morte d''Arthur (The Death of Arthur)',
                     'The tragic downfall of a legendary king and his knights.',
                     'As Arthur''s reign reached its zenith, the seeds of his downfall were sown. The love affair between Sir Lancelot and Queen Guinevere fractured the Round Table, leading to bitter rivalries and betrayals. The quest for the Holy Grail further exposed the knights'' flaws, as only the purest could succeed.\\n\\nIn the end, Arthur faced his illegitimate son Mordred in a final battle that left both mortally wounded. As he lay dying, Arthur entrusted his kingdom to Sir Bedivere and was taken to the mystical Isle of Avalon, where he is said to await a time when Britain needs him most.',
                     'Early 16th Century');
@@ -193,10 +195,10 @@ const seedDatabase = async () => {
         await pool.query(`
             INSERT INTO character_stories (character_id, story_id, role) VALUES
             (1, 1, 'The Once and Future King'),
-            (13, 1, 'Arthur's Kingmaker''),
-            (14, 1, 'The man who put the sword in the stone')
-            (15, 1, 'Arthur's Foster Father''),
-            (16, 1, 'Arthur''s Foster Brother'),
+            (13, 1, 'Arthur''s Kingmaker'),
+            (14, 1, 'The man who put the sword in the stone'),
+            (15, 1, 'Arthur''s Foster Father'),
+            (17, 1, 'Arthur''s Foster Brother'),
             
             (1, 2, 'The Waiting King'),
             (2, 2, 'The Achiever of the Grail'),
@@ -209,12 +211,16 @@ const seedDatabase = async () => {
             (8, 3, 'The Tragic Companion'),
             
             (9, 4, 'The Penitent Hero'),
+            (19, 4, 'The Jealous Goddess'),
             
             (10, 5, 'The Outlaw Leader'),
+            (18, 5, 'The Absent King'),
             
             (11, 6, 'The Unyielding Laborer'),
             
             (1,7, 'The Legendary King'),
+            (6, 7, 'The Adulterous Knight'),
+            (16, 7, 'The Tragic Queen'),
             (12, 7, 'The Treacherous Usurper');
         `);
 
@@ -231,16 +237,27 @@ const seedDatabase = async () => {
             (1, 2), -- Arthur: Folklore
             (7, 1), -- Gilgamesh: Mythology
             (7, 3), -- Gilgamesh: Tragedy
-            (10, 2); -- Robin Hood: Folklore
+            (10, 2), -- Robin Hood: Folklore
+            (11, 2); -- John Hood: Folklore
         `);
 
         // Link Tags to Stories
         await pool.query(`
             INSERT INTO story_tags (story_id, tag_id) VALUES
+            (1, 4), -- Arthur: Heroic Journey
+            (1, 2), -- Arthur: Folklore
+            (2, 4), -- Grail: Heroic Journey
+            (2, 3), -- Grail: Tragedy
+            (2, 2), -- Grail: Folklore
             (3, 1), -- Gilgamesh: Mythology
             (3, 3), -- Gilgamesh: Tragedy
+            (4, 1), -- Heracles: Mythology
+            (4, 3), -- Heracles: Tragedy
+            (4, 4), -- Heracles: Heroic Journey
             (5, 2), -- Robin Hood: Folklore
-            (7, 3); -- Le Morte d'Arthur: Tragedy
+            (6, 2), -- John Hood: Folklore
+            (7, 3), -- Le Morte d'Arthur: Tragedy
+            (7, 2); -- Le Morte d'Arthur: Folklore
         `);
 
         console.log('Database seeded successfully with new test data!');
