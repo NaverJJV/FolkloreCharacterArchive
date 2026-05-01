@@ -13,7 +13,8 @@ app.use(cors({
 }));
 
 // Middleware to parse incoming JSON data
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use((req, res, next) => {
     if (['POST', 'PUT'].includes(req.method) && !req.is('application/json')) {
         return res.status(415).json({ message: 'Content-Type must be application/json' });
